@@ -1,36 +1,47 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../models/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { User } from '../models/entities/user.entity';
+import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
+  //Inyeccion del userRepository
+  constructor(private readonly userRepository: UserRepository) {}
 
-  CreateUser(user: CreateUserDto) {
-    const newUser = this.userRepository.create(user);
-    return this.userRepository.save(newUser);
+  async CreateUser(user: CreateUserDto): Promise<User> {
+    try {
+      return await this.userRepository.save(user);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
-  getUsers() {
-    return this.userRepository.find();
+  async getUsers() {
+    return await this.userRepository.findActiveUsers();
   }
 
-  getUser(id: number) {
-    return this.userRepository.findOne({
-      where: {
-        id,
-      },
-    });
+  async getUser(id: number): Promise<User> {
+    try {
+      return await this.userRepository.findById(id);
+    } catch (error) {
+      throw new NotFoundException();
+    }
   }
 
-  updateUser(id: number, User: UpdateUserDto) {
-    this.userRepository.update({ id }, User);
+  async updateUser(id: number, user: UpdateUserDto): Promise<User> {
+    try {
+      return await this.userRepository.save({ id, ...user });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
-  deleteUser(id: number) {
-    return this.userRepository.delete({ id });
+  async deleteUser(id: number): Promise<void> {
+    try {
+      await this.userRepository.softDelete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }
