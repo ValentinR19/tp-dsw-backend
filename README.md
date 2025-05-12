@@ -27,6 +27,8 @@
 
 ## Project setup
 
+Crear archivo .env en la raíz del proyecto, guíandose del .env.template
+
 ```bash
 $ npm install
 ```
