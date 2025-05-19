@@ -1,8 +1,10 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../models/entities/user.entity';
 import { UserRepository } from '../repository/user.repository';
+import { DeepPartial } from 'typeorm';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +13,11 @@ export class UsersService {
 
   async CreateUser(user: CreateUserDto): Promise<User> {
     try {
-      return await this.userRepository.save(user);
+      const existUser = await this.getByUsername(user.userName);
+      if (existUser) {
+        throw new BadRequestException('El usuario ya existe');
+      }
+      return await this.save(user);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -19,6 +25,9 @@ export class UsersService {
 
   async getUsers() {
     return await this.userRepository.findActiveUsers();
+  }
+  async getByUsername(username: string): Promise<User | null> {
+    return this.userRepository.findByUsername(username);
   }
 
   async getUser(id: number): Promise<User> {
@@ -31,7 +40,7 @@ export class UsersService {
 
   async updateUser(id: number, user: UpdateUserDto): Promise<User> {
     try {
-      return await this.userRepository.save({ id, ...user });
+      return await this.save({ id, ...user });
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -40,6 +49,16 @@ export class UsersService {
   async deleteUser(id: number): Promise<void> {
     try {
       await this.userRepository.softDelete(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  private async save(dto: DeepPartial<User>): Promise<User> {
+    try {
+      if (dto.password) dto.password = await bcrypt.hash(dto.password, 10);
+      const user = await this.userRepository.save(dto);
+      return user;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
