@@ -16,6 +16,10 @@ export class UserRepository {
     return this.repository.findOneOrFail({ where: { id } });
   }
 
+  async findByUsername(username: string): Promise<User | null> {
+    return this.repository.findOne({ where: { userName: username } });
+  }
+
   async save(user: DeepPartial<User>): Promise<User> {
     return this.repository.save(user);
   }
