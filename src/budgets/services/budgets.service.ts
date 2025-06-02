@@ -1,34 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Budget } from './budget.entity';
+import { Budget } from './entities/budget.entity';
 import { CreateBudgetDto } from './dto/create-budget.dto';
+import { UpdateBudgetDto } from './dto/update-budget.dto';
 
 @Injectable()
 export class BudgetService {
   constructor(
     @InjectRepository(Budget)
-    private repo: Repository<Budget>
+    private readonly budgetRepository: Repository<Budget>,
   ) {}
 
-  create(dto: CreateBudgetDto) {
-    const budget = this.repo.create(dto);
-    return this.repo.save(budget);
+  async create(createBudgetDto: CreateBudgetDto): Promise<Budget> {
+    const budget = this.budgetRepository.create(createBudgetDto);
+    return this.budgetRepository.save(budget);
   }
 
-  findAll() {
-    return this.repo.find();
+  async findAll(): Promise<Budget[]> {
+    return this.budgetRepository.find();
   }
 
-  findOne(id: string) {
-    return this.repo.findOneBy({ uniqueID: id });
+  async findOne(id: string): Promise<Budget> {
+    const budget = await this.budgetRepository.findOneBy({ UniqueID: id });
+    if (!budget) throw new NotFoundException('Budget not found');
+    return budget;
   }
 
-  update(id: string, dto: Partial<CreateBudgetDto>) {
-    return this.repo.update(id, dto);
+  async update(id: string, updateBudgetDto: UpdateBudgetDto): Promise<Budget> {
+    await this.findOne(id); // ensure it exists
+    await this.budgetRepository.update(id, updateBudgetDto);
+    return this.findOne(id);
   }
 
-  remove(id: string) {
-    return this.repo.delete(id);
+  async remove(id: string): Promise<void> {
+    const result = await this.budgetRepository.delete(id);
+    if (result.affected === 0) throw new NotFoundException('Budget not found');
   }
 }
