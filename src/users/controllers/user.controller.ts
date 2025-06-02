@@ -4,9 +4,9 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../models/entities/user.entity';
 import { UsersService } from '../services/users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
 
   @Post()
   async createUser(@Body() newUser: CreateUserDto): Promise<User> {
