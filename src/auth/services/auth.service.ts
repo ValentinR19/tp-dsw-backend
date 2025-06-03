@@ -8,8 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UsersService, private jwtService: JwtService) { }
-
+  constructor(
+    private readonly userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser(dto: { username: string; password: string }) {
     const user = await this.userService.getByUsername(dto.username);

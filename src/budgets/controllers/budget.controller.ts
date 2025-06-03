@@ -1,6 +1,6 @@
-import { Controller, Post, Get, Patch, Delete, Param, Body } from '@nestjs/common';
-import { BudgetService } from './budget.service';
-import { CreateBudgetDto } from './dto/create-budget.dto';
+import { CreateBudgetDto } from '@budgets-module/models/dto/create-budget.dto';
+import { BudgetService } from '@budgets-module/services/budgets.service';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 
 @Controller('budgets')
 export class BudgetController {
@@ -17,17 +17,17 @@ export class BudgetController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.service.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: Partial<CreateBudgetDto>) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<CreateBudgetDto>) {
     return this.service.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.service.remove(id);
   }
 }

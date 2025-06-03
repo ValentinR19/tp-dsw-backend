@@ -1,11 +1,11 @@
+import { BudgetController } from '@budgets-module/controllers/budget.controller';
+import { Budget } from '@budgets-module/models/entities/budget.entity';
+import { BudgetService } from '@budgets-module/services/budgets.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Budget } from './entities/budget.entity';
-import { BudgetService } from './budget.service';
-import { BudgetController } from './budget.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Budget])], 
+  imports: [TypeOrmModule.forFeature([Budget])],
   controllers: [BudgetController],
   providers: [BudgetService],
 })
