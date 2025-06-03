@@ -1,14 +1,13 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import bcrypt from 'bcrypt';
+import { DeepPartial } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../models/entities/user.entity';
 import { UserRepository } from '../repository/user.repository';
-import { DeepPartial } from 'typeorm';
-import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  //Inyeccion del userRepository
   constructor(private readonly userRepository: UserRepository) { }
 
   async CreateUser(user: CreateUserDto): Promise<User> {
