@@ -18,6 +18,7 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@users-module/*":["src/users/*"],
       "@config-module/*":["src/config/*"],
       "@main-module/*": ["src/*"]
     }
