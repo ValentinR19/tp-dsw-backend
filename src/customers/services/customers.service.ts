@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from '@customers-module/models/entities/customer.entity';
-import { CreateCustomerDto } from '@customers-module/dto/create-customer.dto';
+import { CreateCustomerDto } from '@customers-module/models/dto/create-customer.dto';
 //import { UpdateCustomerDto } from '@customers-module/dto/update-customer.dto'; No lo tengo hecho
 
 @Injectable()
