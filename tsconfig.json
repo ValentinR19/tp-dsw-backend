@@ -18,10 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@budgets-module/*":["src/budgets/*"],
-      "@customers-module/*":["src/customers/*"],
-      "@users-module/*":["src/users/*"],
-      "@config-module/*":["src/config/*"],
+      "@budgets-module/*": ["src/budgets/*"],
+      "@customers-module/*": ["src/customers/*"],
+      "@product-module/*": ["src/products/*"],
+      "@users-module/*": ["src/users/*"],
+      "@shared-module/*": ["src/shared/*"],
+      "@config-module/*": ["src/config/*"],
       "@main-module/*": ["src/*"]
     }
   }
