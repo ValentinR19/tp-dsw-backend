@@ -1,15 +1,14 @@
-import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, type: 'varchar', length: 40, name: 'user_name' })
+  @Column({ unique: true })
   userName: string;
 
-  @Column({ type: 'varchar', name: 'password' })
+  @Column()
   password: string;
 
   @Column()
@@ -24,15 +23,12 @@ export class User {
   @Column({ default: true })
   active: boolean;
 
-  @CreateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @Exclude({ toPlainOnly: true })
-  @DeleteDateColumn()
+  @Column()
   deletedAt: Date;
-
-  fullName: string;
 }

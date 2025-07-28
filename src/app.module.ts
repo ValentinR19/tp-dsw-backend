@@ -3,13 +3,17 @@ import databaseConfig from '@config-module/database.config';
 import { validationSchema } from '@config-module/validation.schema';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RouterModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { routes } from './shared/route';
 import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    RouterModule.register(routes),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -36,6 +40,7 @@ import { UsersModule } from './users/users.module';
       }),
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
