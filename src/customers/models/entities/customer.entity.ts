@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { CustomerShipping } from './customer-shipping.entity';
 @Entity()
 export class Customer {
   @PrimaryGeneratedColumn('uuid')
@@ -37,4 +37,8 @@ export class Customer {
 
   @Column({ type: 'date', nullable: true })
   birthdate: Date;
+
+  @OneToMany(() => CustomerShipping, customerShipping => customerShipping.customer)
+  customerShipping: CustomerShipping[];
+
 }
