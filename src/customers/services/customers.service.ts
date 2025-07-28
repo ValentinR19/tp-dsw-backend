@@ -1,16 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Customer } from './entities/customer.entity';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { Customer } from '@customers-module/models/entities/customer.entity';
+import { CreateCustomerDto } from '@customers-module/dto/create-customer.dto';
+//import { UpdateCustomerDto } from '@customers-module/dto/update-customer.dto'; No lo tengo hecho
 
 @Injectable()
 export class CustomerService {
   constructor(
     @InjectRepository(Customer)
     private readonly customerRepository: Repository<Customer>,
-  ) {}
+  ) { }
 
   async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
     const customer = this.customerRepository.create(createCustomerDto);

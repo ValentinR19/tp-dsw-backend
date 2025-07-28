@@ -2,39 +2,39 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Customer {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn({ type: 'decimal', name: 'id' })
+  id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, name: 'first_name' })
   firstName: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, name: 'last_name' })
   lastName: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', length: 20, name: 'company_name' })
   companyName: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', length: 10, name: 'gender', nullable: true })
   gender: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 30, name: 'address' })
   address: string;
 
-  @Column()
+  @Column({ type: 'decimal', name: 'zip_code' })
   zipCode: string;
 
-  @Column()
+  @Column({ type: 'varchar', name: 'type_of_document' })
   typeOfDocument: string;
 
-  @Column()
+  @Column({ type: 'decimal', name: 'document' })
   document: string;
 
-  @Column()
+  @Column({ type: 'decimal', name: 'internal_code' })
   internalCode: string;
 
-  @Column({ default: true })
+  @Column({ default: true, type: 'boolean', name: 'active' })
   active: boolean;
 
   @Column({ type: 'date', nullable: true })
-  birthdate: Date;
+  birthDate: Date;
 }

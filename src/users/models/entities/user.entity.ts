@@ -2,33 +2,33 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: 'decimal', name: 'id' })
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, type: 'varchar', length: 20, name: 'user_name' })
   userName: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, name: 'password' })
   password: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, name: 'first_name' })
   firstName: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, name: 'last_name' })
   lastName: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 50, name: 'email' })
   email: string;
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', name: 'active', default: true })
   active: boolean;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'datetime', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @Column()
+  @Column({ type: 'datetime', name: 'deleted_at' })
   deletedAt: Date;
 }
