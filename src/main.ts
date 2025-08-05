@@ -9,6 +9,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true }));
   app.use(helmet());
+  app.enableCors();
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((error) => {

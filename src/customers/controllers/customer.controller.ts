@@ -1,9 +1,10 @@
-import { Controller, Post, Get, Patch, Delete, Param, Body } from '@nestjs/common';
-import { CustomerService } from '../services/customers.service';
 import { CreateCustomerDto } from '@customers-module/models/dto/create-customer.dto';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { CustomerService } from '../services/customers.service';
+
 @Controller('customers')
 export class CustomerController {
-  constructor(private service: CustomerService) { }
+  constructor(private service: CustomerService) {}
 
   @Post()
   create(@Body() dto: CreateCustomerDto) {
@@ -16,12 +17,12 @@ export class CustomerController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.service.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: Partial<CreateCustomerDto>) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<CreateCustomerDto>) {
     return this.service.update(id, dto);
   }
 

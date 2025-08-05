@@ -1,10 +1,8 @@
 import { UsersService } from '@main-module/users/services/users.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import bcrypt from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './src/users/models/entities/user.entity';
-import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@users-module/models/entities/user.entity';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +25,7 @@ export class AuthService {
   }
 
   async login(user: Partial<User>) {
-    const payload = { sub: user.id, username: user.username };
+    const payload = { sub: user.id, username: user.userName };
     return {
       accessToken: await this.jwtService.sign(payload),
     };
