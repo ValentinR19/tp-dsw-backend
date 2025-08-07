@@ -1,5 +1,5 @@
+import { Customer } from '@customers-module/models/classes/customer.entity';
 import { CreateCustomerDto } from '@customers-module/models/dto/create-customer.dto';
-import { Customer } from '@customers-module/models/entities/customer.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
