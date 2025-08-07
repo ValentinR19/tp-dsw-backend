@@ -3,12 +3,12 @@ import bcrypt from 'bcrypt';
 import { DeepPartial } from 'typeorm';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { User } from '../models/entities/user.entity';
+import { User } from '../models/classes/user.entity';
 import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
   async CreateUser(user: CreateUserDto): Promise<User> {
     try {

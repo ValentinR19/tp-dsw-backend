@@ -3,7 +3,7 @@ import { BudgetStatusHistory } from '@budgets-module/models/classes/budget-statu
 import { BudgetStatus } from '@budgets-module/models/classes/budget-status.entity';
 import { Customer } from '@customers-module/models/entities/customer.entity';
 import { Currency } from '@main-module/shared/models/classes/currency.entity';
-import { User } from '@users-module/models/entities/user.entity';
+import { User } from '@users-module/models/classes/user.entity';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'budget' })
