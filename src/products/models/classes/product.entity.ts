@@ -1,6 +1,7 @@
+import { BudgetItem } from '@budgets-module/models/classes/budget-item.entity';
 import { ProductPrice } from '@product-module/models/classes/product-price.entity';
 import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'product' })
 export class Product {
@@ -39,4 +40,7 @@ export class Product {
 
   @OneToOne(() => ProductPrice, (price) => price.product)
   price: ProductPrice;
+
+  @OneToMany(() => BudgetItem, (budgetItem) => budgetItem.product)
+  budgetItems: BudgetItem[];
 }

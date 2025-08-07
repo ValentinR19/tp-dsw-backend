@@ -12,7 +12,7 @@ export class UsersService {
 
   async CreateUser(user: CreateUserDto): Promise<User> {
     try {
-      const existUser = await this.getByUsername(user.userName);
+      const existUser = await this.getByUsername(user.username);
       if (existUser) {
         throw new BadRequestException('El usuario ya existe');
       }

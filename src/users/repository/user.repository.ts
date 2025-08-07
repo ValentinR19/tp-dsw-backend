@@ -17,7 +17,7 @@ export class UserRepository {
   }
 
   async findByUsername(username: string): Promise<User | null> {
-    return this.repository.findOne({ where: { userName: username } });
+    return this.repository.findOne({ where: { username: username } });
   }
 
   async save(user: DeepPartial<User>): Promise<User> {

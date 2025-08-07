@@ -17,6 +17,6 @@ export class ProductPriceHistoryRepository {
 
   async findByProductId(productId: number, manager?: EntityManager): Promise<ProductPriceHistory[]> {
     const repo = manager ? manager.getRepository(ProductPriceHistory) : this.repository;
-    return await repo.find({ where: { productId }, order: { changedAt: 'DESC' } });
+    return await repo.find({ where: { productId }, order: { createdAt: 'DESC' } });
   }
 }
