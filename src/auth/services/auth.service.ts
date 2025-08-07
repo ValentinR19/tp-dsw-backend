@@ -1,10 +1,10 @@
 import { UsersService } from '@main-module/users/services/users.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import bcrypt from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './src/users/models/entities/user.entity';
-import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import bcrypt from 'bcrypt';
+import { LoginUserDTO } from '../models/dtos/login-user.dto';
+import { IAccessToken } from '../models/interfaces/access-token.interface';
+import { IPayload } from '../models/interfaces/payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,18 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(dto: { username: string; password: string }) {
+  async login(credentials: LoginUserDTO) {
+    const user = await this.validateUser(credentials);
+    const payload: IPayload = {
+      id: user.id,
+      username: user.email,
+      fullName: `${user.username} ${user.lastName}`,
+    };
+
+    return this.signToken(payload);
+  }
+
+  async validateUser(dto: LoginUserDTO) {
     const user = await this.userService.getByUsername(dto.username);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -26,10 +37,11 @@ export class AuthService {
     return result;
   }
 
-  async login(user: Partial<User>) {
-    const payload = { sub: user.id, username: user.username };
-    return {
-      accessToken: await this.jwtService.sign(payload),
+  private async signToken(payload: IPayload): Promise<IAccessToken> {
+    const signedToken: IAccessToken = {
+      token: this.jwtService.sign(payload, { expiresIn: process.env.TOKEN_EXPIRATION }),
     };
+
+    return signedToken;
   }
 }

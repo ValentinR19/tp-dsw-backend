@@ -1,9 +1,10 @@
 import { BudgetItem } from '@budgets-module/models/classes/budget-item.entity';
 import { BudgetStatusHistory } from '@budgets-module/models/classes/budget-status-history.entity';
 import { BudgetStatus } from '@budgets-module/models/classes/budget-status.entity';
-import { Customer } from '@customers-module/models/entities/customer.entity';
+import { Customer } from '@customers-module/models/classes/customer.entity';
 import { Currency } from '@main-module/shared/models/classes/currency.entity';
 import { User } from '@users-module/models/classes/user.entity';
+import { Exclude } from 'class-transformer';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'budget' })
@@ -41,14 +42,29 @@ export class Budget {
   @Column({ type: 'varchar', name: 'status_id' })
   statusId: string;
 
-  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
-  updatedAt: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date | null;
 
-  @DeleteDateColumn({ type: 'timestamp', name: 'deleted_at', nullable: true })
-  deletedAt: Date;
+  @Exclude()
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    default: null,
+    select: false,
+  })
+  deletedAt: Date | null;
 
   @ManyToOne(() => BudgetStatus, (status) => status.budgets)
   @JoinColumn({ name: 'status_id', referencedColumnName: 'id' })

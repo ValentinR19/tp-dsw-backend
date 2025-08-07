@@ -1,15 +1,15 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('customer_category')
-export class CustomerCategory {
+@Entity('customer_status')
+export class CustomerStatus {
   @PrimaryGeneratedColumn({ type: 'decimal', name: 'id' })
   id: number;
 
   @Column({ type: 'varchar', length: 20, name: 'name' })
   name: string;
 
-  @Column({ type: 'boolean', name: 'active' })
-  active: string;
+  @Column({ type: 'varchar', length: 20, name: 'color' })
+  color: string;
 
   @Column({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
