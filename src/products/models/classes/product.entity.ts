@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ProductVariant } from './product-variant.entity';
+import { ProductPrice } from '@product-module/models/classes/product-price.entity';
+import { Exclude } from 'class-transformer';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity({ name: 'product' })
 export class Product {
@@ -12,9 +13,30 @@ export class Product {
   @Column({ type: 'text', name: 'description' })
   description: string;
 
-  @Column({ type: 'int', name: 'category_id' })
-  categoryId: number;
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @OneToMany(() => ProductVariant, (variant) => variant.product)
-  variants: ProductVariant[];
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date | null;
+
+  @Exclude()
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    default: null,
+    select: false,
+  })
+  deletedAt: Date | null;
+
+  @OneToOne(() => ProductPrice, (price) => price.product)
+  price: ProductPrice;
 }
