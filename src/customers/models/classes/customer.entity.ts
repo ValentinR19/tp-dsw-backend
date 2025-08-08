@@ -36,9 +36,6 @@ export class Customer {
   @Column({ default: true, type: 'boolean', name: 'active' })
   active: boolean;
 
-  @Column({ type: 'date', nullable: true })
-  birthDate: Date;
-
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
