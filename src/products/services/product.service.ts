@@ -45,7 +45,7 @@ export class ProductService {
     await queryRunner.startTransaction();
     try {
       this.logger.log(`Creating product: ${JSON.stringify(dto)}`);
-      const product: Partial<Product> = { name: dto.name, description: dto.description };
+      const product: Partial<Product> = { name: dto.name, description: dto.description, productCategoryId: dto.productCategoryId };
       const savedProduct = await this.save(product, queryRunner.manager);
 
       if (dto.price) {
@@ -82,6 +82,7 @@ export class ProductService {
         id,
         name: dto.name,
         description: dto.description,
+        productCategoryId: dto.productCategoryId,
       };
 
       const savedProduct = await this.productRepository.save(updatedProduct, queryRunner.manager);
