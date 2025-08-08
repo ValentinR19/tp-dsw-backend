@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { CustomerShipping } from './customer-shipping.entity';
 @Entity('customer')
 export class Customer {
@@ -35,8 +36,32 @@ export class Customer {
   @Column({ default: true, type: 'boolean', name: 'active' })
   active: boolean;
 
-  @Column({ type: 'date', nullable: true })
-  birthDate: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date | null;
+
+  @Exclude()
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    default: null,
+    precision: 0,
+    select: false,
+  })
+  deletedAt: Date | null;
 
   @OneToMany(() => CustomerShipping, (customerShipping) => customerShipping.customer)
   customerShipping: CustomerShipping[];

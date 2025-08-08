@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Customer } from './customer.entity';
-import { JoinColumn } from 'typeorm';
 
 @Entity('customer_shipping')
 export class CustomerShipping {
@@ -43,14 +43,33 @@ export class CustomerShipping {
   @Column({ type: 'varchar', name: 'delivery_instructions' })
   deliveryInstructions: string;
 
-  @Column({ type: 'varchar', name: 'created_at' })
-  createdAt: string;
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @Column({ type: 'varchar', name: 'updated_at' })
-  updatedAt: string;
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date | null;
 
-  @Column({ type: 'varchar', name: 'deleted_at' })
-  deletedAt: string;
+  @Exclude()
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    default: null,
+    precision: 0,
+    select: false,
+  })
+  deletedAt: Date | null;
+
   @ManyToOne(() => Customer, (customer) => customer.customerShipping)
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
   customer: Customer;

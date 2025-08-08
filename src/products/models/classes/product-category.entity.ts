@@ -1,16 +1,17 @@
 import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Product } from './product.entity';
 
-@Entity('customer_status')
-export class CustomerStatus {
-  @PrimaryGeneratedColumn({ type: 'decimal', name: 'id' })
+@Entity('product_categories')
+export class ProductCategory {
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ type: 'varchar', length: 20, name: 'name' })
+  @Column({ type: 'varchar', name: 'name', unique: true })
   name: string;
 
-  @Column({ type: 'varchar', length: 20, name: 'color' })
-  color: string;
+  @Column({ type: 'varchar', name: 'description', nullable: true })
+  description: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -38,4 +39,7 @@ export class CustomerStatus {
     select: false,
   })
   deletedAt: Date | null;
+
+  @OneToMany(() => Product, (product) => product.productCategory)
+  products: Product[];
 }
