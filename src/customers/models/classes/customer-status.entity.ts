@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('customer_status')
 export class CustomerStatus {
@@ -11,12 +12,30 @@ export class CustomerStatus {
   @Column({ type: 'varchar', length: 20, name: 'color' })
   color: string;
 
-  @Column({ type: 'timestamp', name: 'created_at' })
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', name: 'updated_at' })
-  updatedAt: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date | null;
 
-  @Column({ type: 'timestamp', name: 'deleted_at', nullable: true })
-  deletedAt: Date;
+  @Exclude()
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    default: null,
+    precision: 0,
+    select: false,
+  })
+  deletedAt: Date | null;
 }

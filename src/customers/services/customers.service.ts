@@ -1,40 +1,60 @@
 import { Customer } from '@customers-module/models/classes/customer.entity';
 import { CreateCustomerDto } from '@customers-module/models/dto/create-customer.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
-//import { UpdateCustomerDto } from '@customers-module/dto/update-customer.dto'; No lo tengo hecho
+import { CustomerRepository } from '@customers-module/repositories/customer.repository';
+import { Injectable, Logger } from '@nestjs/common';
+import { NotFoundErrorException } from '@shared-module/exceptions/not-found.exception';
+import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exception';
+import { DeepPartial } from 'typeorm';
 
 @Injectable()
 export class CustomerService {
-  constructor(
-    @InjectRepository(Customer)
-    private readonly customerRepository: Repository<Customer>,
-  ) {}
+  private logger: Logger = new Logger(CustomerService.name);
 
-  async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
-    const customer = this.customerRepository.create(createCustomerDto);
-    return this.customerRepository.save(customer);
-  }
+  constructor(private readonly customerRepository: CustomerRepository) {}
 
   async findAll(): Promise<Customer[]> {
-    return this.customerRepository.find();
+    return this.customerRepository.findAll();
   }
 
-  async findOne(id: number): Promise<Customer> {
-    const customer = await this.customerRepository.findOneBy({ id });
-    if (!customer) throw new NotFoundException('Customer not found');
-    return customer;
+  async findById(id: number): Promise<Customer> {
+    try {
+      this.logger.log(`Finding customer by id: ${id}`);
+      const customer = await this.customerRepository.findById(id);
+      this.logger.log(`Customer found: ${JSON.stringify(customer)}`);
+      return customer;
+    } catch (error) {
+      throw new NotFoundErrorException(Customer.name, error);
+    }
+  }
+
+  async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+    this.logger.log(`Creating customer: ${JSON.stringify(createCustomerDto)}`);
+    return this.save(createCustomerDto);
   }
 
   async update(id: number, updateCustomerDto: DeepPartial<CreateCustomerDto>): Promise<Customer> {
-    await this.findOne(id);
-    await this.customerRepository.update(id, updateCustomerDto);
-    return this.findOne(id);
+    this.logger.log(`Updating customer: ${JSON.stringify(updateCustomerDto)}`);
+    await this.findById(id);
+    return this.save({ ...updateCustomerDto, id });
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.customerRepository.delete(id);
-    if (result.affected === 0) throw new NotFoundException('Customer not found');
+  async softDelete(id: number): Promise<void> {
+    try {
+      this.logger.log(`Removing customer: ${id}`);
+      await this.customerRepository.softDelete(id);
+    } catch (error) {
+      throw new NotSavedErrorException(Customer.name, error);
+    }
+  }
+
+  private async save(customer: DeepPartial<Customer>): Promise<Customer> {
+    try {
+      this.logger.log(`Saving customer: ${JSON.stringify(customer)}`);
+      const savedCustomer = await this.customerRepository.save(customer);
+      this.logger.log(`Customer saved: ${JSON.stringify(savedCustomer)}`);
+      return savedCustomer;
+    } catch (error) {
+      throw new NotSavedErrorException(Customer.name, error);
+    }
   }
 }
