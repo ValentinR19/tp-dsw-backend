@@ -18,6 +18,7 @@ export class ProductPriceHistory {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
+    precision: 0,
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;

@@ -1,21 +1,17 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { CustomerShipping } from '../models/classes/customer-shipping.entity';
-import {CustomerShippingRepository,ListQuery,} from '../repositories/customer-shipping.repoository';
+import { CustomerShippingRepository, ListQuery } from '../repositories/customer-shipping.repoository';
 
 type CreatePayload = {
   customerId?: number;
   recipientFirstName?: string;
   recipientLastName?: string;
-  recipientEmail?: string;      // <- en tu entity es "recipient_company_name"
+  recipientEmail?: string; // <- en tu entity es "recipient_company_name"
   phoneNumber?: string;
   phoneAreaCode?: string;
   alias?: string;
-  adress?: string;              // escrito así en tu entity
-  number?: string | number;     // lo convierto a int
+  adress?: string; // escrito así en tu entity
+  number?: string | number; // lo convierto a int
   complement?: string | number; // lo convierto a int
   postalCode?: string | number; // lo convierto a int
   deliveryInstructions?: string;
@@ -73,17 +69,17 @@ export class CustomerShippingService {
     const customerId = this.toIntOrThrow(dto.customerId, 'customerId');
 
     const recipientFirstName = this.ensureString(dto.recipientFirstName, 'recipientFirstName', 255);
-    const recipientLastName  = this.ensureString(dto.recipientLastName,  'recipientLastName',  255);
+    const recipientLastName = this.ensureString(dto.recipientLastName, 'recipientLastName', 255);
     // recipientEmail == company name en tu schema
-    const recipientEmail     = this.ensureString(dto.recipientEmail, 'recipientEmail', 255);
-    const phoneNumber        = this.ensureString(dto.phoneNumber, 'phoneNumber', 50);
-    const phoneAreaCode      = this.ensureString(dto.phoneAreaCode, 'phoneAreaCode', 10);
-    const alias              = this.ensureString(dto.alias, 'alias', 255);
-    const adress             = this.ensureString(dto.adress, 'adress', 255);
+    const recipientEmail = this.ensureString(dto.recipientEmail, 'recipientEmail', 255);
+    const phoneNumber = this.ensureString(dto.phoneNumber, 'phoneNumber', 50);
+    const phoneAreaCode = this.ensureString(dto.phoneAreaCode, 'phoneAreaCode', 10);
+    const alias = this.ensureString(dto.alias, 'alias', 255);
+    const adress = this.ensureString(dto.adress, 'adress', 255);
 
-    const number             = this.toIntOrThrow(dto.number, 'number');
-    const complement         = this.toOptionalInt(dto.complement, 'complement'); // puede ser opcional, ajustá si no
-    const postalCode         = this.toIntOrThrow(dto.postalCode, 'postalCode');
+    const number = this.toIntOrThrow(dto.number, 'number');
+    const complement = this.toOptionalInt(dto.complement, 'complement'); // puede ser opcional, ajustá si no
+    const postalCode = this.toIntOrThrow(dto.postalCode, 'postalCode');
 
     const deliveryInstructions = this.ensureOptionalString(dto.deliveryInstructions, 'deliveryInstructions', 500);
 
@@ -110,17 +106,19 @@ export class CustomerShippingService {
     if (dto.customerId !== undefined) next.customerId = this.toIntOrThrow(dto.customerId, 'customerId');
 
     if (dto.recipientFirstName !== undefined) next.recipientFirstName = this.ensureString(dto.recipientFirstName, 'recipientFirstName', 255);
-    if (dto.recipientLastName  !== undefined) next.recipientLastName  = this.ensureString(dto.recipientLastName,  'recipientLastName',  255);
-    if (dto.recipientEmail     !== undefined) next.recipientEmail     = this.ensureString(dto.recipientEmail,     'recipientEmail',     255); // company
-    if (dto.phoneNumber        !== undefined) next.phoneNumber        = this.ensureString(dto.phoneNumber,        'phoneNumber',        50);
-    if (dto.phoneAreaCode      !== undefined) next.phoneAreaCode      = this.ensureString(dto.phoneAreaCode,      'phoneAreaCode',      10);
-    if (dto.alias              !== undefined) next.alias              = this.ensureString(dto.alias,              'alias',              255);
-    if (dto.adress             !== undefined) next.adress             = this.ensureString(dto.adress,             'adress',             255);
+    if (dto.recipientLastName !== undefined) next.recipientLastName = this.ensureString(dto.recipientLastName, 'recipientLastName', 255);
+    if (dto.recipientEmail !== undefined) next.recipientEmail = this.ensureString(dto.recipientEmail, 'recipientEmail', 255); // company
+    if (dto.phoneNumber !== undefined) next.phoneNumber = this.ensureString(dto.phoneNumber, 'phoneNumber', 50);
+    if (dto.phoneAreaCode !== undefined) next.phoneAreaCode = this.ensureString(dto.phoneAreaCode, 'phoneAreaCode', 10);
+    if (dto.alias !== undefined) next.alias = this.ensureString(dto.alias, 'alias', 255);
+    if (dto.adress !== undefined) next.adress = this.ensureString(dto.adress, 'adress', 255);
 
-    if (dto.number      !== undefined) next.number      = String(this.toIntOrThrow(dto.number, 'number'));
-    if (dto.complement  !== undefined) {const comp = this.toOptionalInt(dto.complement, 'complement');
-      next.complement = comp !== undefined ? String(comp) : undefined; }
-    if (dto.postalCode  !== undefined) next.postalCode  = String(this.toIntOrThrow(dto.postalCode,  'postalCode'));
+    if (dto.number !== undefined) next.number = String(this.toIntOrThrow(dto.number, 'number'));
+    if (dto.complement !== undefined) {
+      const comp = this.toOptionalInt(dto.complement, 'complement');
+      next.complement = comp !== undefined ? String(comp) : undefined;
+    }
+    if (dto.postalCode !== undefined) next.postalCode = String(this.toIntOrThrow(dto.postalCode, 'postalCode'));
 
     if (dto.deliveryInstructions !== undefined) next.deliveryInstructions = this.ensureOptionalString(dto.deliveryInstructions, 'deliveryInstructions', 500);
 

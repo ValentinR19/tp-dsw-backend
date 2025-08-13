@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('budget_billing')
 export class BudgetBilling {
-  @PrimaryGeneratedColumn({ type: 'decimal', name: 'id' })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ type: 'decimal', name: 'id' })
+  @Column({ type: 'int', name: 'budget_id' })
   budgetId: number;
 
   @Column({ type: 'varchar', length: 20, name: 'buyer_company' })

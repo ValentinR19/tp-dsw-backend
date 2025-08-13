@@ -8,7 +8,7 @@ import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) { }
+  constructor(private readonly userRepository: UserRepository) {}
 
   async CreateUser(user: CreateUserDto): Promise<User> {
     try {

@@ -3,12 +3,12 @@ import { BudgetStatusHistory } from '@budgets-module/models/classes/budget-statu
 import { BudgetStatus } from '@budgets-module/models/classes/budget-status.entity';
 import { Customer } from '@customers-module/models/classes/customer.entity';
 import { Currency } from '@main-module/shared/models/classes/currency.entity';
+import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { User } from '@users-module/models/classes/user.entity';
-import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'budget' })
-export class Budget {
+export class Budget extends AuditEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -33,38 +33,14 @@ export class Budget {
   @Column({ type: 'varchar', name: 'customer_id' })
   customerId: string;
 
-  @Column({ type: 'varchar', name: 'seller_id' })
+  @Column({ type: 'int', name: 'seller_id' })
   sellerId: string;
 
-  @Column({ type: 'varchar', name: 'currency_id' })
+  @Column({ type: 'int', name: 'currency_id' })
   currencyId: string;
 
-  @Column({ type: 'varchar', name: 'status_id' })
+  @Column({ type: 'int', name: 'status_id' })
   statusId: string;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date | null;
-
-  @Exclude()
-  @DeleteDateColumn({
-    name: 'deleted_at',
-    nullable: true,
-    default: null,
-    select: false,
-  })
-  deletedAt: Date | null;
 
   @ManyToOne(() => BudgetStatus, (status) => status.budgets)
   @JoinColumn({ name: 'status_id', referencedColumnName: 'id' })

@@ -1,5 +1,5 @@
-import {Controller,Get,Post,Patch,Delete,Param,Body,Query,ParseIntPipe,DefaultValuePipe,ParseBoolPipe,} from '@nestjs/common';
-import { CustomerCategoryService } from '../services/customer-category.service';    
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
+import { CustomerCategoryService } from '../services/customer-category.service';
 @Controller('customer-categories')
 export class CustomerCategoryController {
   constructor(private readonly service: CustomerCategoryService) {}

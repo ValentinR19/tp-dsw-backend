@@ -1,11 +1,12 @@
 import { Budget } from '@budgets-module/models/classes/budget.entity';
+import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 
-import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('currencies')
-export class Currency {
+export class Currency extends AuditEntity {
   constructor(nombre: string, cotizazcion: number, conversion: number, codigo: string) {
+    super();
     this.name = nombre;
     this.quotation = cotizazcion;
     this.conversion = conversion;
@@ -37,30 +38,6 @@ export class Currency {
 
   @Column('varchar', { name: 'code', length: 10 })
   code: string;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date | null;
-
-  @Exclude()
-  @DeleteDateColumn({
-    name: 'deleted_at',
-    nullable: true,
-    default: null,
-    select: false,
-  })
-  deletedAt: Date | null;
 
   @OneToMany(() => Budget, (budget) => budget.currency)
   budgets: Budget[];

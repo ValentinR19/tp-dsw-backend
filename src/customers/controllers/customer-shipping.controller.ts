@@ -1,4 +1,4 @@
-import {Controller,Get,Post,Patch,Delete,Param,Body,Query,ParseIntPipe,DefaultValuePipe,ParseBoolPipe,} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
 import { CustomerShippingService } from '../services/customer-shipping.service';
 
 @Controller('customer-shipping')

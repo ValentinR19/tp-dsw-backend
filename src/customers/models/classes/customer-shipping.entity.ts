@@ -1,9 +1,9 @@
-import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { AuditEntity } from '@shared-module/models/classes/audit.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Customer } from './customer.entity';
 
 @Entity('customer_shipping')
-export class CustomerShipping {
+export class CustomerShipping extends AuditEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -42,33 +42,6 @@ export class CustomerShipping {
 
   @Column({ type: 'varchar', name: 'delivery_instructions' })
   deliveryInstructions: string;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    precision: 0,
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    precision: 0,
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date | null;
-
-  @Exclude()
-  @DeleteDateColumn({
-    name: 'deleted_at',
-    nullable: true,
-    default: null,
-    precision: 0,
-    select: false,
-  })
-  deletedAt: Date | null;
 
   @ManyToOne(() => Customer, (customer) => customer.customerShipping)
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })

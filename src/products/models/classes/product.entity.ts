@@ -1,11 +1,11 @@
 import { BudgetItem } from '@budgets-module/models/classes/budget-item.entity';
 import { ProductPrice } from '@product-module/models/classes/product-price.entity';
-import { Exclude } from 'class-transformer';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { AuditEntity } from '@shared-module/models/classes/audit.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductCategory } from './product-category.entity';
 
 @Entity({ name: 'product' })
-export class Product {
+export class Product extends AuditEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -17,30 +17,6 @@ export class Product {
 
   @Column({ type: 'text', name: 'description' })
   description: string;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date | null;
-
-  @Exclude()
-  @DeleteDateColumn({
-    name: 'deleted_at',
-    nullable: true,
-    default: null,
-    select: false,
-  })
-  deletedAt: Date | null;
 
   @ManyToOne(() => ProductCategory, (productCategory) => productCategory.products)
   @JoinColumn({ name: 'product_category_id', referencedColumnName: 'id' })

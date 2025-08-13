@@ -25,16 +25,12 @@ export class CustomerCategoryRepository {
     return name.trim().replace(/\s+/g, ' ');
   }
 
-  async existsByNameInsensitive(
-    name: string,
-    excludeId?: number,
-    withDeleted = true,
-  ): Promise<boolean> {
+  async existsByNameInsensitive(name: string, excludeId?: number, withDeleted = true): Promise<boolean> {
     const normalized = name.toLowerCase();
     return this.repo.exist({
       where: {
-        name: Raw(alias => `LOWER(${alias}) = :n`, { n: normalized }),
-        ...(excludeId ? { id: Raw(alias => `${alias} <> :id`, { id: excludeId }) } : {}),
+        name: Raw((alias) => `LOWER(${alias}) = :n`, { n: normalized }),
+        ...(excludeId ? { id: Raw((alias) => `${alias} <> :id`, { id: excludeId }) } : {}),
       } as any,
       withDeleted,
     });
@@ -61,22 +57,14 @@ export class CustomerCategoryRepository {
   }
 
   async findPaginated(q: ListQuery): Promise<{ data: Partial<CustomerCategory>[]; total: number }> {
-    const {
-      page = 1,
-      limit = 10,
-      search,
-      active,
-      includeDeleted = false,
-      orderBy = 'createdAt',
-      order: direction = 'DESC',
-    } = q;
+    const { page = 1, limit = 10, search, active, includeDeleted = false, orderBy = 'createdAt', order: direction = 'DESC' } = q;
 
     const where: FindOptionsWhere<CustomerCategory> = {};
     if (typeof active === 'boolean') where.active = active ? 'true' : 'false';
 
     if (search && search.trim()) {
       const s = `%${search.trim().toLowerCase()}%`;
-      (where as any).name = Raw(alias => `LOWER(${alias}) LIKE :s`, { s });
+      (where as any).name = Raw((alias) => `LOWER(${alias}) LIKE :s`, { s });
     }
 
     const [data, total] = await this.repo.findAndCount({

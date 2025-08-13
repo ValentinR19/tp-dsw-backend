@@ -22,7 +22,7 @@ export class BudgetStatusHistory {
   @Column({ type: 'int', name: 'user_id' })
   userId: number;
 
-  @Column({ type: 'timestamp', name: 'changed_at' })
+  @Column({ type: 'timestamp', precision: 0, name: 'changed_at' })
   changedAt: Date;
 
   @Column({ type: 'boolean', name: 'is_reverted' })

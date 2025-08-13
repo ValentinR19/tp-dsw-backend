@@ -1,8 +1,9 @@
+import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
-export class User {
-  @PrimaryGeneratedColumn({ type: 'decimal', name: 'id' })
+export class User extends AuditEntity {
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column({ unique: true, type: 'varchar', length: 20, name: 'user_name' })
@@ -22,13 +23,4 @@ export class User {
 
   @Column({ type: 'boolean', name: 'active', default: true })
   active: boolean;
-
-  @Column({ type: 'timestamp', name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
-
-  @Column({ type: 'timestamp', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
-
-  @Column({ type: 'timestamp', name: 'deleted_at' })
-  deletedAt: Date;
 }

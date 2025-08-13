@@ -6,8 +6,8 @@ import { CustomerShipping } from '../models/classes/customer-shipping.entity';
 export type ListQuery = {
   page?: number;
   limit?: number;
-  search?: string;            // busca en alias / recipientFirstName / recipientLastName / recipientEmail (company)
-  customerId?: number;        // filtra por cliente
+  search?: string; // busca en alias / recipientFirstName / recipientLastName / recipientEmail (company)
+  customerId?: number; // filtra por cliente
   includeDeleted?: boolean;
   orderBy?: 'id' | 'customerId' | 'alias' | 'recipientFirstName' | 'recipientLastName' | 'createdAt' | 'updatedAt';
   order?: 'ASC' | 'DESC';
@@ -46,15 +46,7 @@ export class CustomerShippingRepository {
   }
 
   async findPaginated(q: ListQuery): Promise<{ data: Partial<CustomerShipping>[]; total: number }> {
-    const {
-      page = 1,
-      limit = 10,
-      search,
-      customerId,
-      includeDeleted = false,
-      orderBy = 'createdAt',
-      order: direction = 'DESC',
-    } = q;
+    const { page = 1, limit = 10, search, customerId, includeDeleted = false, orderBy = 'createdAt', order: direction = 'DESC' } = q;
 
     const where: FindOptionsWhere<CustomerShipping> = {};
 
@@ -66,10 +58,10 @@ export class CustomerShippingRepository {
       const s = `%${search.trim().toLowerCase()}%`;
       // Buscamos en múltiples campos (MySQL-friendly)
       (where as any) = [
-        { ...(customerId ? { customerId } : {}), alias: Raw(a => `LOWER(${a}) LIKE :s`, { s }) },
-        { ...(customerId ? { customerId } : {}), recipientFirstName: Raw(a => `LOWER(${a}) LIKE :s`, { s }) },
-        { ...(customerId ? { customerId } : {}), recipientLastName: Raw(a => `LOWER(${a}) LIKE :s`, { s }) },
-        { ...(customerId ? { customerId } : {}), recipientEmail: Raw(a => `LOWER(${a}) LIKE :s`, { s }) }, // company
+        { ...(customerId ? { customerId } : {}), alias: Raw((a) => `LOWER(${a}) LIKE :s`, { s }) },
+        { ...(customerId ? { customerId } : {}), recipientFirstName: Raw((a) => `LOWER(${a}) LIKE :s`, { s }) },
+        { ...(customerId ? { customerId } : {}), recipientLastName: Raw((a) => `LOWER(${a}) LIKE :s`, { s }) },
+        { ...(customerId ? { customerId } : {}), recipientEmail: Raw((a) => `LOWER(${a}) LIKE :s`, { s }) }, // company
       ] as any;
     }
 

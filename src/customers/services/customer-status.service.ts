@@ -1,6 +1,6 @@
-import {Injectable,NotFoundException,BadRequestException,ConflictException,} from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { CustomerStatus } from '../models/classes/customer-status.entity';
-import {CustomerStatusRepository,ListQuery,} from '../repositories/customer-status.repository';
+import { CustomerStatusRepository, ListQuery } from '../repositories/customer-status.repository';
 
 type CreatePayload = { name?: string; color?: string };
 type UpdatePayload = { name?: string; color?: string };
@@ -61,10 +61,7 @@ export class CustomerStatusService {
 
     let next: CustomerStatus = { ...current };
     if (typeof body.name === 'string' || typeof body.color === 'string') {
-      const clean = await this.validateBeforeSave(
-        { name: body.name ?? current.name, color: body.color ?? current.color },
-        id,
-      );
+      const clean = await this.validateBeforeSave({ name: body.name ?? current.name, color: body.color ?? current.color }, id);
       next = Object.assign(current, clean);
     }
 
