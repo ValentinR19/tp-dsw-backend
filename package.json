@@ -38,14 +38,13 @@
     "dotenv": "^17.2.1",
     "helmet": "^8.1.0",
     "joi": "^17.13.3",
-    "mysql2": "^3.14.0",
+    "mysql2": "^3.14.3",
     "nestjs-cls": "^6.0.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1",
-    "typeorm": "^0.3.22"
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -72,6 +71,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typeorm": "^0.3.26",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
   },
