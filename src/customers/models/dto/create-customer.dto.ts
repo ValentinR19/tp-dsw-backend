@@ -1,26 +1,4 @@
-export class CreateCustomerDto {
-  firstName: string;
-  lastName: string;
-  companyName?: string;
-  gender?: string;
-  address: string;
-  zipCode: string;
-  typeOfDocument: string;
-  document: string;
-  internalCode: string;
-  birthdate?: Date;
-}
-
-import { 
-  IsString, 
-  IsOptional, 
-  IsNotEmpty, 
-  IsDateString, 
-  Length, 
-  IsIn, 
-  Matches 
-} from 'class-validator';
-
+import { IsString, IsOptional, IsNotEmpty, IsDateString, Length, IsIn, Matches } from 'class-validator';
 export class CreateCustomerDto {
   @IsString()
   @IsNotEmpty()
@@ -38,7 +16,7 @@ export class CreateCustomerDto {
   companyName?: string;
 
   @IsOptional()
-  @IsIn(['male', 'female', 'other'])
+  @IsIn(['Hombre', 'Mujer', 'Otro'])
   gender?: string;
 
   @IsString()
@@ -48,17 +26,17 @@ export class CreateCustomerDto {
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[0-9]{4,10}$/, { message: 'zipCode must be between 4 and 10 digits' })
+  @Matches(/^[0-9]{4,10}$/, { message: 'El zipcode debe ser entre 4 y 10 digitos' })
   zipCode: string;
 
   @IsString()
   @IsNotEmpty()
-  @IsIn(['DNI', 'Passport', 'CUIT'])
+  @IsIn(['DNI', 'CUIT'])
   typeOfDocument: string;
 
   @IsString()
   @IsNotEmpty()
-  @Matches(/^[A-Za-z0-9-]{5,20}$/, { message: 'document must be 5-20 alphanumeric characters' })
+  @Matches(/^[A-Za-z0-9-]{5,20}$/, { message: 'El dni debe tneer entre 5 y 20 caracteres' })
   document: string;
 
   @IsString()
