@@ -13,7 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) { }
 
-  // Login principal
+  // Login principal: devuelve JWT
   async login(credentials: LoginUserDTO): Promise<IAccessToken> {
     const user = await this.validateUser(credentials);
 
@@ -36,7 +36,7 @@ export class AuthService {
 
     if (!passwordMatch) throw new NotFoundException('User not found');
 
-    // Devolvemos solo los datos necesarios para login, sin password
+    // Devolvemos solo los datos necesarios, sin password
     return {
       id: user.id,
       username: user.username,
@@ -50,7 +50,8 @@ export class AuthService {
   private async signToken(payload: IPayload): Promise<IAccessToken> {
     return {
       token: this.jwtService.sign(payload, {
-        expiresIn: process.env.TOKEN_EXPIRATION,
+        secret: process.env.JWT_SECRET || 'defaultSecret', // secreto JWT
+        expiresIn: process.env.TOKEN_EXPIRATION || '14d',   // fallback válido
       }),
     };
   }
