@@ -1,7 +1,7 @@
-import { UsersService } from '@main-module/users/services/users.service';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UsersService } from '@main-module/users/services/users.service';
 import { JwtService } from '@nestjs/jwt';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from '../models/dtos/login-user.dto';
 import { IAccessToken } from '../models/interfaces/access-token.interface';
 import { IPayload } from '../models/interfaces/payload.interface';
@@ -10,38 +10,49 @@ import { IPayload } from '../models/interfaces/payload.interface';
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+    private readonly jwtService: JwtService,
+  ) { }
 
-  async login(credentials: LoginUserDTO) {
+  // Login principal
+  async login(credentials: LoginUserDTO): Promise<IAccessToken> {
     const user = await this.validateUser(credentials);
+
     const payload: IPayload = {
       id: user.id,
       username: user.email,
-      fullName: `${user.username} ${user.lastName}`,
+      fullName: `${user.firstName} ${user.lastName}`,
     };
 
     return this.signToken(payload);
   }
 
+  // Valida usuario y password
   async validateUser(dto: LoginUserDTO) {
     const user = await this.userService.getByUsername(dto.username);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+
+    if (!user) throw new NotFoundException('User not found');
+
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
-    if (!passwordMatch) {
-      throw new NotFoundException('User not found');
-    }
-    const { password, ...result } = user;
-    return result;
+
+    if (!passwordMatch) throw new NotFoundException('User not found');
+
+    // Devolvemos solo los datos necesarios para login, sin password
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
   }
 
+  // Genera JWT
   private async signToken(payload: IPayload): Promise<IAccessToken> {
-    const signedToken: IAccessToken = {
-      token: this.jwtService.sign(payload, { expiresIn: process.env.TOKEN_EXPIRATION }),
+    return {
+      token: this.jwtService.sign(payload, {
+        expiresIn: process.env.TOKEN_EXPIRATION,
+      }),
     };
-
-    return signedToken;
   }
 }
+
