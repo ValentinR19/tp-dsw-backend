@@ -9,7 +9,7 @@ export class User extends AuditEntity {
   @Column({ unique: true, type: 'varchar', length: 20, name: 'user_name' })
   username: string;
 
-  @Column({ type: 'varchar', length: 20, name: 'password' })
+  @Column({ type: 'varchar', length: 255, name: 'password' })
   password: string;
 
   @Column({ type: 'varchar', length: 20, name: 'first_name' })
