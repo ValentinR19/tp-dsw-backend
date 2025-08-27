@@ -2,12 +2,14 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { LoginUserDTO } from '../models/dtos/login-user.dto';
 import { AuthService } from '../services/auth.service';
 
-@Controller('auth')
+@Controller('auth') // prefijo de la ruta
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
-  @Post('login')
+  @Post('login') // endpoint: /api/auth/login
   async login(@Body() dto: LoginUserDTO) {
-    return this.authService.validateUser(dto);
+    // Llamamos al método login del AuthService que genera el JWT
+    return this.authService.login(dto);
   }
 }
+
