@@ -30,4 +30,3 @@ export class UpdateUserDto {
   @MaxLength(50, { message: 'El email no puede tener más de 50 caracteres' })
   email?: string;
 }
-

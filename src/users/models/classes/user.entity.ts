@@ -1,13 +1,13 @@
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends AuditEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ unique: true, type: 'varchar', length: 20, name: 'user_name' })
+  @Column({ unique: true, type: 'varchar', length: 20, name: 'username' })
   username: string;
 
   @Column({ type: 'varchar', length: 255, name: 'password' })
