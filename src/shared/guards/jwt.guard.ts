@@ -15,6 +15,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   handleRequest(err: Error, userPayload, info: string) {
     if (err || !userPayload) {
+      console.error(err);
       Logger.warn(`Ocurrió un evento que impidio la validacion del JWT. Stacktrace: ${info}`, 'JwtAuthGuard');
       throw err || new UnauthorizedException();
     }

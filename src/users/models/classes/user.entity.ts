@@ -1,6 +1,7 @@
+import { Role } from '@main-module/roles/models/classes/role.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends AuditEntity {
@@ -25,4 +26,12 @@ export class User extends AuditEntity {
 
   @Column({ type: 'boolean', name: 'active', default: true })
   active: boolean;
+
+  @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable({
+    name: 'users_roles',
+    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' },
+  })
+  roles: Role[];
 }
