@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   // Login principal: devuelve JWT
   async login(credentials: LoginUserDTO): Promise<IAccessToken> {
@@ -51,9 +51,8 @@ export class AuthService {
     return {
       token: this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET || 'defaultSecret', // secreto JWT
-        expiresIn: process.env.TOKEN_EXPIRATION || '14d',   // fallback válido
+        expiresIn: process.env.TOKEN_EXPIRATION || '14d', // fallback válido
       }),
     };
   }
 }
-
