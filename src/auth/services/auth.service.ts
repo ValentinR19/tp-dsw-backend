@@ -1,5 +1,5 @@
 import { UsersService } from '@main-module/users/services/users.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from '../models/dtos/login-user.dto';
@@ -36,9 +36,8 @@ export class AuthService {
 
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
 
-    if (!passwordMatch) throw new NotFoundException('User not found');
+    if (!passwordMatch) throw new UnauthorizedException('Invalid credentials');
 
-    // Devolvemos solo los datos necesarios, sin password
     return {
       id: user.id,
       username: user.username,

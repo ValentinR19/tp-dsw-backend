@@ -8,7 +8,6 @@ export class AuthController {
 
   @Post('login') // endpoint: /api/auth/login
   async login(@Body() dto: LoginUserDTO) {
-    // Llamamos al método login del AuthService que genera el JWT
     return this.authService.login(dto);
   }
 }

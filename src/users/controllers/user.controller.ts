@@ -1,5 +1,8 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
+import { PageParamDTO } from '@shared-module/models/dtos/page-param.dto';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { UsersService } from 'src/users/services/users.service';
 import { User } from '../models/classes/user.entity';
 import { CreateUserDto } from '../models/dto/create-user.dto';
@@ -8,6 +11,12 @@ import { UpdateUserDto } from '../models/dto/update-user.dto';
 @Controller()
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('page/:pageNumber')
+  async search(@Param() { pageNumber }: PageParamDTO, @Query() dto: PaginatedQueryDTO<User>): Promise<IPaginated<User>> {
+    return this.usersService.search(pageNumber, dto);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post()
