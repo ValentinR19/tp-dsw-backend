@@ -44,10 +44,10 @@ export class RoleRepository {
       where: {
         id,
       },
-      // relations: {
-      //   permissions: true,
-      //   informes: true,
-      // },
+      relations: {
+        //  permissions: true,
+        informes: true,
+      },
     });
   }
 
