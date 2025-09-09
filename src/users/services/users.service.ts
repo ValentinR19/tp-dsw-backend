@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { DeepPartial } from 'typeorm';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../models/classes/user.entity';
+import { CreateUserDto } from '../models/dto/create-user.dto';
+import { UpdateUserDto } from '../models/dto/update-user.dto';
 import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
