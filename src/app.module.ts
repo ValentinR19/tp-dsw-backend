@@ -11,6 +11,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { routes } from './shared/route';
 import { UsersModule } from './users/users.module';
+import { RolesModule } from './roles/roles.module';
+import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
     AuthModule,
+    RolesModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

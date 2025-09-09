@@ -1,14 +1,21 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import * as bcrypt from 'bcrypt';
 import { DeepPartial } from 'typeorm';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../models/classes/user.entity';
+import { CreateUserDto } from '../models/dto/create-user.dto';
+import { UpdateUserDto } from '../models/dto/update-user.dto';
 import { UserRepository } from '../repository/user.repository';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
+
+  async search(page: number, dto: PaginatedQueryDTO<User>): Promise<IPaginated<User>> {
+    const { results, global, filters } = dto;
+    return await this.userRepository.search(page, results, global, filters);
+  }
 
   async CreateUser(user: CreateUserDto): Promise<User> {
     try {

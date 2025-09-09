@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '@main-module/users/services/users.service';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDTO } from '../models/dtos/login-user.dto';
 import { IAccessToken } from '../models/interfaces/access-token.interface';
-import { IPayload } from '../models/interfaces/payload.interface';
+import { IUserPayload } from '../models/interfaces/payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -17,10 +17,12 @@ export class AuthService {
   async login(credentials: LoginUserDTO): Promise<IAccessToken> {
     const user = await this.validateUser(credentials);
 
-    const payload: IPayload = {
+    const payload: IUserPayload = {
       id: user.id,
       username: user.email,
       fullName: `${user.firstName} ${user.lastName}`,
+      iss: String(process.env.ORIGIN),
+      roles: user.roles,
     };
 
     return this.signToken(payload);
@@ -34,23 +36,23 @@ export class AuthService {
 
     const passwordMatch = await bcrypt.compare(dto.password, user.password);
 
-    if (!passwordMatch) throw new NotFoundException('User not found');
+    if (!passwordMatch) throw new UnauthorizedException('Invalid credentials');
 
-    // Devolvemos solo los datos necesarios, sin password
     return {
       id: user.id,
       username: user.username,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      roles: user.roles,
     };
   }
 
   // Genera JWT
-  private async signToken(payload: IPayload): Promise<IAccessToken> {
+  private async signToken(payload: IUserPayload): Promise<IAccessToken> {
     return {
       token: this.jwtService.sign(payload, {
-        secret: process.env.JWT_SECRET || 'defaultSecret', // secreto JWT
+        secret: process.env.JWT_SECRET_KEY, // secreto JWT
         expiresIn: process.env.TOKEN_EXPIRATION || '14d', // fallback válido
       }),
     };
