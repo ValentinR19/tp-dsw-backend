@@ -1,23 +1,40 @@
-version: '3.1'
-
 services:
-  tp-dsw-backend:
-    build: ./
-    ports:
-      - ${PORT}:3000
-    volumes:
-      - ./src:/usr/src/app/src
-    command: npm run start:dev
+  dsw-db:
+    image: mysql:8
+    container_name: dsw-db
     environment:
-      - PORT=${PORT}
-      - ORIGIN=${ORIGIN}
-      - URL=${URL}
-      - IS_PRODUCTION=${IS_PRODUCTION}
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
+      MYSQL_ROOT_PASSWORD: 7350
+      MYSQL_DATABASE: dswdb
+      MYSQL_USER: dsw_user
+      MYSQL_PASSWORD: 7350
+    ports:
+      - "3306:3306"
+    networks:
+      - dsw_network
+
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: tp-dsw-backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - dsw-db
+    networks:
+      - dsw_network
+
+  frontend:
+    build:
+      context: ../tp-dsw-frontend
+      dockerfile: Dockerfile
+    container_name: tp-dsw-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
     networks:
       - dsw_network
 
