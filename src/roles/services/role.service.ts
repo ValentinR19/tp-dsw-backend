@@ -27,9 +27,7 @@ export class RoleService {
 
   async findById(id: number): Promise<Role> {
     try {
-      this.logger.log(`Finding role by id: ${id}`);
       const role = await this.roleRepository.findById(id);
-      this.logger.log(`Role found: ${JSON.stringify(role)}`);
       return role;
     } catch (error) {
       throw new NotFoundErrorException(User.name, error);
@@ -38,9 +36,7 @@ export class RoleService {
 
   async findRolesByUserID(userID: number): Promise<Role[]> {
     try {
-      this.logger.log(`Finding role by user id: ${userID}`);
       const role = await this.roleRepository.findRolesByUserID(userID);
-      this.logger.log(`Role found: ${JSON.stringify(role)}`);
       return role;
     } catch (error) {
       throw new NotFoundErrorException(User.name, error);

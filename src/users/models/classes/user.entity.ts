@@ -8,7 +8,7 @@ export class User extends AuditEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ unique: true, type: 'varchar', length: 20, name: 'username' })
+  @Column({ unique: true, type: 'varchar', length: 20, name: 'username', collation: 'utf8mb4_bin', nullable: false })
   username: string;
 
   @Column({ type: 'varchar', length: 255, name: 'password' })

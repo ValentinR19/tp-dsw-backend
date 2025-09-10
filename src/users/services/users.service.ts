@@ -32,6 +32,7 @@ export class UsersService {
   async getUsers() {
     return await this.userRepository.findActiveUsers();
   }
+
   async getByUsername(username: string): Promise<User | null> {
     return this.userRepository.findByUsername(username);
   }
