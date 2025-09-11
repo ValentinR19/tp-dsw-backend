@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { Role } from '@main-module/roles/models/classes/role.entity';
+import { ArrayMinSize, IsArray, IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -27,4 +28,9 @@ export class CreateUserDto {
   @MaxLength(50, { message: 'El email no puede tener más de 50 caracteres' })
   @IsNotEmpty()
   email: string;
+
+  @IsArray()
+  @IsNotEmpty()
+  @ArrayMinSize(1, { message: 'El usuario debe tener al menos un rol' })
+  roles: Partial<Role>[] = [];
 }
