@@ -11,10 +11,6 @@ name!: string;
 @Length(0, 1000, { message: 'La description no debe exceder 1000 caracteres' })
 description?: string;
 
-@IsOptional()
-@IsInt({ message: 'El id de producto debe ser un entero' })
-@Min(1, { message: 'El id de producto debe ser >= 1' })
-productCategoryId!: number;
 
 @IsOptional()
 @IsNumber(
