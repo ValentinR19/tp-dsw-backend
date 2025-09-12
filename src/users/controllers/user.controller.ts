@@ -18,7 +18,7 @@ export class UsersController {
     return this.usersService.search(pageNumber, dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+ 
   @Post()
   async createUser(@Body() newUser: CreateUserDto): Promise<User> {
     return this.usersService.CreateUser(newUser);

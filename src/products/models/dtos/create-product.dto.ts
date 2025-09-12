@@ -1,19 +1,24 @@
-import { IsCurrency, IsDecimal, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString, IsOptional, Length, Min, IsInt} from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
-  @IsNotEmpty()
-  name: string;
+  @Length(1, 120, { message: 'El nombre debe tener entre 1 y 120 caracteres' })
+  name!: string;
 
+  @IsOptional()
   @IsString()
-  description: string;
+  @Length(0, 1000, { message: 'La description no debe exceder 1000 caracteres' })
+  description?: string;
 
-  @IsNumber()
-  productCategoryId: number;
+  
+  @IsInt({ message: 'El id de producto debe ser un entero' })
+  @Min(1, { message: 'EL id de producto debe ser >= 1' })
+  productCategoryId!: number;
 
-  @IsDecimal()
+  @IsOptional()
+  @IsNumber(
+    { allowInfinity: false, allowNaN: false, maxDecimalPlaces: 2 },
+    { message: 'El precio debe ser un número con hasta 2 decimales' })
+  @Min(0, { message: 'El precio no puede ser negativo' })
   price?: number;
-
-  @IsCurrency()
-  currency?: string;
 }
