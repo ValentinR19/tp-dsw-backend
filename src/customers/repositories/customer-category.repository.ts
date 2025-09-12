@@ -60,7 +60,7 @@ export class CustomerCategoryRepository {
     const { page = 1, limit = 10, search, active, includeDeleted = false, orderBy = 'createdAt', order: direction = 'DESC' } = q;
 
     const where: FindOptionsWhere<CustomerCategory> = {};
-    if (typeof active === 'boolean') where.active = active ? 'true' : 'false';
+    if (typeof active === 'boolean') where.active = active;
 
     if (search && search.trim()) {
       const s = `%${search.trim().toLowerCase()}%`;

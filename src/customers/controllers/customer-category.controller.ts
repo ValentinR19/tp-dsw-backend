@@ -1,12 +1,14 @@
 import { Controller, Get, Post, Patch, Delete, Param, Body, Query, ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
 import { CustomerCategoryService } from '../services/customer-category.service';
+import { CreateCustomerCategoryDto } from '../models/dto/create-customer-category.dto';
+import { UpdateCustomerCategoryDto } from '../models/dto/update-customer-category.dto';
 @Controller('customer-categories')
 export class CustomerCategoryController {
-  constructor(private readonly service: CustomerCategoryService) {}
+  constructor(private readonly service: CustomerCategoryService) { }
 
   @Post()
-  create(@Body() body: any) {
-    return this.service.create(body);
+  create(@Body() dto: CreateCustomerCategoryDto) {
+    return this.service.create(dto);
   }
 
   @Get()
@@ -28,8 +30,8 @@ export class CustomerCategoryController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: any) {
-    return this.service.update(id, body);
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateCustomerCategoryDto) {
+    return this.service.update(id, dto);
   }
 
   @Delete(':id')

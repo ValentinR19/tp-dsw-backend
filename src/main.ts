@@ -9,7 +9,7 @@ async function bootstrap() {
   app.enableVersioning();
   app.setGlobalPrefix('api');
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true, whitelist: true, }));
   app.use(helmet());
   app.enableCors({
     origin: 'http://localhost:4200',

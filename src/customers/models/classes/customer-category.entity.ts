@@ -10,5 +10,5 @@ export class CustomerCategory extends AuditEntity {
   name: string;
 
   @Column({ type: 'boolean', name: 'active' })
-  active: string;
+  active: boolean;
 }

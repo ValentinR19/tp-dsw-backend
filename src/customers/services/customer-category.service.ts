@@ -1,90 +1,26 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { CustomerCategory } from '../models/classes/customer-category.entity';
 import { CustomerCategoryRepository, ListQuery } from '../repositories/customer-category.repository';
-
-type CreatePayload = { name?: string; active?: boolean };
-type UpdatePayload = { name?: string; active?: boolean };
+import { CreateCustomerCategoryDto } from '../models/dto/create-customer-category.dto';
+import { UpdateCustomerCategoryDto } from '../models/dto/update-customer-category.dto';
 
 @Injectable()
 export class CustomerCategoryService {
-  constructor(private readonly repository: CustomerCategoryRepository) {}
+  constructor(private readonly repository: CustomerCategoryRepository) { }
 
-  // -------- Validaciones de negocio --------
-  private async validateBeforeSave(dto: CreatePayload, excludeId?: number) {
-    if (!dto.name || typeof dto.name !== 'string') {
-      throw new BadRequestException('El nombre es requerido.');
-    }
+  // ---------- CRUD ----------
+  async create(dto: CreateCustomerCategoryDto) {
+    const normalizedName = this.repository.normalizeName(dto.name);
 
-    const normalized = this.repository.normalizeName(dto.name);
-    if (normalized.length === 0) throw new BadRequestException('El nombre no puede quedar vacío.');
-    if (normalized.length > 20) throw new BadRequestException('Máximo 20 caracteres.');
+    const exists = await this.repository.existsByNameInsensitive(normalizedName);
+    if (exists) throw new ConflictException(`Ya existe "${normalizedName}".`);
 
-    const exists = await this.repository.existsByNameInsensitive(normalized, excludeId, true);
-    if (exists) throw new ConflictException(`Ya existe "${normalized}".`);
-
-    return {
-      name: normalized,
-      active: typeof dto.active === 'boolean' ? dto.active : true,
-    };
-  }
-
-  /* 
-  :**+=-:...................................... ..............
-.+%####*+-:...............................:---:.............
-..-*##**##**+-:.......................-=*#%%%#+.............
-....:+###**####*+==-:-::::........:-*#%%%#%%%*:.............
-......:=*#######%%#####*++--::..=##%#####%%#=...............
-.........:=*######%%%%%%%#*+=--*%##**#%%#*-:................
-............:-+*###%%%%%%%%#*+#%%####*=:....................
-..............-+####%%%##***+**###*=:.......................
-.............=%#############***+++- ........................
-.............:***####****#**#*+=+++:........................
-..............=*+*#**+++++++====++++=-......................
-............:=++==+==+++++++++++++++++=-....................
-...........-==----::::-=--===++==========:..................
-...........=+====-----=++-::-======+=====-..................
-...........=**++++++====---:::-====+++==-...................
-............*#*****+++==--====**=-=++=-.....................
-............+####*****+++++*###+-===:.......................
-.............::-+***+=--====#*=--===........................
-................:+**+=+====++=--=+==........................
-................-*****#*+++=--====++-:......................
-...............:+*******++=--===++++++=:....................
-.............:=+****++==----====++++*+++=:..................
-...........:=******++===-----===++++++++++:.................
-..........=+*******++===------==+++++++++++:.......:::::....
-.........=*********++==------=++++*++++++++- .:-=*#%%%%##+:.
-........:+*********+++===-===+**++++++++++++-=%+::-====--:..
-........:***********++======+***+++++++++++****:..  ........
-.........+**********++======+****+++++++*++*+++=:::.........
-.........:*#*********+=======+*##*++*****++++++++*#*+=:.....
-.......-*#########*****++++==++*##*******+++++++++####*-....
-.......+#%#*########****++++==+*#******+++++++++++*#*+=.....
-....... .:-**####%%####***+**#********++++=+++++++*=:.......
-......::::-+######%%%%########******++++++===+++**+=-:.... .
-.....:#%%%%%%%######%%%%%%###******++++++++++==+*#%%%#***+=-
-......:+*##*=-=+=+*##%%%%##****##******+++=-:.....--=#%%%%#=
-.............  .....:-+#***+++*+=====--::........... .-=-:..
-................... .:**++++**#+:. .........................
-...................-=*+++++*%%%##*:.........................
-.................:*%##***##*#####*+.........................
-.................+%###**+=-...:::...........................
-
- */
-
-  // -------- CRUD --------
-  async create(body: CreatePayload) {
-    const clean = await this.validateBeforeSave(body);
     const entity = this.repository.create({
-      ...clean,
-      active: String(clean.active),
+      name: normalizedName,
+      active: dto.active ?? true,
     });
-    try {
-      return await this.repository.save(entity);
-    } catch (err) {
-      if (err?.code === 'duplicate-key') throw new ConflictException('El nombre ya está en uso.');
-      throw err;
-    }
+
+    return this.repository.save(entity);
   }
 
   async findAll(q: ListQuery) {
@@ -100,23 +36,23 @@ export class CustomerCategoryService {
     return item;
   }
 
-  async update(id: number, body: UpdatePayload) {
+  async update(id: number, dto: UpdateCustomerCategoryDto) {
     const current = await this.findOne(id);
 
-    let next: CustomerCategory = { ...current };
-    if (typeof body.name === 'string') {
-      const clean = await this.validateBeforeSave({ name: body.name }, id); //ver somo solucionar esto del actiuve
-      next = Object.assign(current, clean);
-    } else if (typeof body.active === 'boolean') {
-      next = Object.assign(current, { active: body.active });
+    const next: Partial<CustomerCategory> = { ...current };
+
+    if (dto.name !== undefined) {
+      const normalizedName = this.repository.normalizeName(dto.name);
+      const exists = await this.repository.existsByNameInsensitive(normalizedName, id);
+      if (exists) throw new ConflictException(`Ya existe "${normalizedName}".`);
+      next.name = normalizedName;
     }
 
-    try {
-      return await this.repository.save(next);
-    } catch (err) {
-      if (err?.code === 'duplicate-key') throw new ConflictException('El nombre ya está en uso.');
-      throw err;
+    if (dto.active !== undefined) {
+      next.active = dto.active;
     }
+
+    return this.repository.save(next as CustomerCategory);
   }
 
   async remove(id: number) {
