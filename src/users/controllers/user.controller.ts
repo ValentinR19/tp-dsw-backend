@@ -9,16 +9,15 @@ import { CreateUserDto } from '../models/dto/create-user.dto';
 import { UpdateUserDto } from '../models/dto/update-user.dto';
 
 @Controller()
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('page/:pageNumber')
   async search(@Param() { pageNumber }: PageParamDTO, @Query() dto: PaginatedQueryDTO<User>): Promise<IPaginated<User>> {
     return this.usersService.search(pageNumber, dto);
   }
 
-  // @UseGuards(JwtAuthGuard)
   @Post()
   async createUser(@Body() newUser: CreateUserDto): Promise<User> {
     return this.usersService.create(newUser);
