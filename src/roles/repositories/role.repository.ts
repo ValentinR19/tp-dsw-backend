@@ -46,7 +46,9 @@ export class RoleRepository {
       },
       relations: {
         //  permissions: true,
-        informes: true,
+        informes: {
+          tipoInforme: true,
+        },
       },
     });
   }

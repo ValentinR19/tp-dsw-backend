@@ -9,19 +9,18 @@ import { CreateUserDto } from '../models/dto/create-user.dto';
 import { UpdateUserDto } from '../models/dto/update-user.dto';
 
 @Controller()
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('page/:pageNumber')
   async search(@Param() { pageNumber }: PageParamDTO, @Query() dto: PaginatedQueryDTO<User>): Promise<IPaginated<User>> {
     return this.usersService.search(pageNumber, dto);
   }
 
- 
   @Post()
   async createUser(@Body() newUser: CreateUserDto): Promise<User> {
-    return this.usersService.CreateUser(newUser);
+    return this.usersService.create(newUser);
   }
 
   @Get()
@@ -31,16 +30,16 @@ export class UsersController {
 
   @Get(':id')
   async getUser(@Param('id', ParseIntPipe) id: number): Promise<User> {
-    return this.usersService.getUser(id);
+    return this.usersService.findById(id);
   }
 
   @Patch(':id')
   async updateUser(@Param('id', ParseIntPipe) id: number, @Body() user: UpdateUserDto) {
-    return this.usersService.updateUser(id, user);
+    return this.usersService.update(id, user);
   }
 
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.deleteUser(id);
+    return this.usersService.delete(id);
   }
 }

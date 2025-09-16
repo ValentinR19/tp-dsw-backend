@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, QueryRunner, Repository } from 'typeorm';
 import { User } from '../models/classes/user.entity';
 
 @Injectable()
@@ -35,15 +35,21 @@ export class UserRepository {
   }
 
   async findById(id: number): Promise<User> {
-    return this.repository.findOneOrFail({ where: { id } });
+    return this.repository.findOneOrFail({
+      where: { id },
+      relations: {
+        roles: true,
+      },
+    });
   }
 
   async findByUsername(username: string): Promise<User | null> {
     return this.repository.findOne({ where: { username: username } });
   }
 
-  async save(user: DeepPartial<User>): Promise<User> {
-    return this.repository.save(user);
+  async save(user: DeepPartial<User>, queryRunner?: QueryRunner): Promise<User> {
+    const repository = queryRunner ? queryRunner.manager.getRepository(User) : this.repository;
+    return repository.save(user);
   }
 
   async softDelete(id: number): Promise<void> {

@@ -11,7 +11,7 @@ export class UserRoleService {
     return this.userRoleRepository.save(body, queryRunner);
   }
 
-  removedByUserId(userId: number, queryRunner?: QueryRunner): Promise<void> {
-    return this.userRoleRepository.removedAllByUserId(userId, queryRunner);
+  async removedByUserId(userId: number, queryRunner?: QueryRunner): Promise<void> {
+    return await this.userRoleRepository.removedAllByUserId(userId, queryRunner);
   }
 }
