@@ -13,6 +13,9 @@ import { routes } from './shared/route';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { PermissionModule } from './permission/permission.module';
+import { ProductModule } from '@product-module/product.module';
+import { CustomerModule } from '@customers-module/customers.module';
+
 
 @Module({
   imports: [
@@ -50,6 +53,9 @@ import { PermissionModule } from './permission/permission.module';
     AuthModule,
     RolesModule,
     PermissionModule,
+    ProductModule,
+    CustomerModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

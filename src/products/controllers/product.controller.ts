@@ -10,7 +10,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get('page/:pageNumber')
-  async findAll(@Param('pageNumber)', ParseIntPipe) page: number, @Query('resultSize') resultSize: number = 15, @Query() filter?: Partial<Product>): Promise<IPaginated<Product>> {
+  async findAll(@Param('pageNumber', ParseIntPipe) page: number, @Query('resultSize') resultSize: number = 15, @Query() filter?: Partial<Product>): Promise<IPaginated<Product>> {
     return await this.productService.search(page, resultSize, filter);
   }
 
