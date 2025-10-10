@@ -1,12 +1,4 @@
-import { IsString, IsEmail, MinLength, MaxLength, IsOptional, Length, IsBoolean } from 'class-validator';
+import { CreateCustomerCategoryDto } from '@customers-module/models/dto/create-customer-category.dto';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class UpdateCustomerCategoryDto {
-@IsOptional()
-@IsString({ message: 'El nombre debe ser un texto.' })
-@Length(1, 20, { message: 'El nombre debe tener entre 1 y 20 caracteres.' })
-name ?: string;
-
-@IsOptional()
-@IsBoolean({ message: 'El campo activo debe ser booleano.' })
-active ?: boolean;
-}
+export class UpdateCustomerCategoryDto extends PartialType(CreateCustomerCategoryDto) {}

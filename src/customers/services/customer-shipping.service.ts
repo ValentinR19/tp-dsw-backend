@@ -6,7 +6,7 @@ import { UpdateCustomerShippingDto } from '../models/dto/update-customer-shippin
 
 @Injectable()
 export class CustomerShippingService {
-  constructor(private readonly repository: CustomerShippingRepository) { }
+  constructor(private readonly repository: CustomerShippingRepository) {}
 
   async create(dto: CreateCustomerShippingDto) {
     const entity = this.repository.create({

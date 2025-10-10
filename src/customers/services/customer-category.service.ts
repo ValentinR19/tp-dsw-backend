@@ -1,58 +1,53 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exception';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { CustomerCategory } from '../models/classes/customer-category.entity';
-import { CustomerCategoryRepository, ListQuery } from '../repositories/customer-category.repository';
 import { CreateCustomerCategoryDto } from '../models/dto/create-customer-category.dto';
 import { UpdateCustomerCategoryDto } from '../models/dto/update-customer-category.dto';
+import { CustomerCategoryRepository } from '../repositories/customer-category.repository';
 
 @Injectable()
 export class CustomerCategoryService {
-  constructor(private readonly repository: CustomerCategoryRepository) { }
+  constructor(private readonly repository: CustomerCategoryRepository) {}
 
-  // ---------- CRUD ----------
-  async create(dto: CreateCustomerCategoryDto) {
-    const normalizedName = this.repository.normalizeName(dto.name);
-
-    const exists = await this.repository.existsByNameInsensitive(normalizedName);
-    if (exists) throw new ConflictException(`Ya existe "${normalizedName}".`);
-
-    const entity = this.repository.create({
-      name: normalizedName,
-      active: dto.active ?? true,
-    });
-
-    return this.repository.save(entity);
+  /* Este es el metodo para buscar todos sin paginación ni filtros */
+  async findAll(): Promise<CustomerCategory[]> {
+    return await this.repository.findAll();
   }
 
-  async findAll(q: ListQuery) {
-    const { data, total } = await this.repository.findPaginated(q);
-    const page = q.page ?? 1;
-    const limit = q.limit ?? 10;
-    return { data, meta: { total, page, limit, pages: Math.ceil(total / limit) } };
+  /* Este es el método para paginar */
+  async search(page: number, dto: PaginatedQueryDTO<CustomerCategory>): Promise<IPaginated<CustomerCategory>> {
+    const { results, filters, global } = dto;
+    return await this.repository.search(page, results, filters, global);
   }
 
+  /* Si no lo encuentra rejecta directamente el repository. Aca capturamos el error */
   async findOne(id: number, includeDeleted = false) {
-    const item = await this.repository.findById(id, includeDeleted);
-    if (!item) throw new NotFoundException(`CustomerCategory ${id} no encontrada`);
-    return item;
+    try {
+      return await this.repository.findById(id, includeDeleted);
+    } catch (eror) {
+      throw new NotFoundException(`CustomerCategory ${id} no encontrada`);
+    }
   }
 
+  async save(entity: Partial<CustomerCategory>) {
+    try {
+      return this.repository.save(entity);
+    } catch (error) {
+      throw new NotSavedErrorException(CustomerCategory.name, error);
+    }
+  }
+
+  async create(dto: CreateCustomerCategoryDto) {
+    return this.save(dto);
+  }
+
+  /* En este metodo reutilizamos metodos del servicios que ya captuan errores
+  Por ende no hace falta hacerlo de nuevo */
   async update(id: number, dto: UpdateCustomerCategoryDto) {
-    const current = await this.findOne(id);
-
-    const next: Partial<CustomerCategory> = { ...current };
-
-    if (dto.name !== undefined) {
-      const normalizedName = this.repository.normalizeName(dto.name);
-      const exists = await this.repository.existsByNameInsensitive(normalizedName, id);
-      if (exists) throw new ConflictException(`Ya existe "${normalizedName}".`);
-      next.name = normalizedName;
-    }
-
-    if (dto.active !== undefined) {
-      next.active = dto.active;
-    }
-
-    return this.repository.save(next as CustomerCategory);
+    await this.findOne(id);
+    return await this.save({ id, ...dto });
   }
 
   async remove(id: number) {

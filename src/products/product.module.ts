@@ -14,9 +14,9 @@ import { ProductCategoryController } from './controllers/product-category.contro
 import { ProductCategoryService } from './services/product-category.service';
 import { ProductCategoryRepository } from './repositories/product-category.repository';
 @Module({
-  imports: [TypeOrmModule.forFeature([Product, ProductPrice, ProductPriceHistory,ProductCategory])],
-  controllers: [ProductController,ProductCategoryController],
-  providers: [ProductPriceRepository, ProductPriceHistoryRepository, ProductRepository, ProductService, ProductPriceService,ProductCategoryService,ProductCategoryRepository],
+  imports: [TypeOrmModule.forFeature([Product, ProductPrice, ProductPriceHistory, ProductCategory])],
+  controllers: [ProductController, ProductCategoryController],
+  providers: [ProductPriceRepository, ProductPriceHistoryRepository, ProductRepository, ProductService, ProductPriceService, ProductCategoryService, ProductCategoryRepository],
   exports: [],
 })
 export class ProductModule {}

@@ -5,7 +5,7 @@ import { UpdateCustomerShippingDto } from '../models/dto/update-customer-shippin
 
 @Controller('customer-shipping')
 export class CustomerShippingController {
-  constructor(private readonly service: CustomerShippingService) { }
+  constructor(private readonly service: CustomerShippingService) {}
 
   @Post()
   create(@Body() dto: CreateCustomerShippingDto) {
