@@ -1,5 +1,6 @@
-import { IsString, IsOptional, IsNotEmpty, IsDateString, Length, IsIn, Matches } from 'class-validator';
-export class CreateCustomerDto {
+import { Customer } from '@customers-module/models/classes/customer.entity';
+import { IsDateString, IsIn, IsNotEmpty, IsOptional, IsString, Length, Matches } from 'class-validator';
+export class CreateCustomerDto extends Customer {
   @IsString()
   @IsNotEmpty()
   @Length(2, 50)
@@ -13,11 +14,11 @@ export class CreateCustomerDto {
   @IsOptional()
   @IsString()
   @Length(2, 100)
-  companyName?: string;
+  companyName: string;
 
   @IsOptional()
   @IsIn(['Hombre', 'Mujer', 'Otro'])
-  gender?: string;
+  gender: string;
 
   @IsString()
   @IsNotEmpty()

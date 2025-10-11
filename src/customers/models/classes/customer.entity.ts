@@ -1,5 +1,7 @@
+import { CustomerCategory } from '@customers-module/models/classes/customer-category.entity';
+import { CustomerStatus } from '@customers-module/models/classes/customer-status.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CustomerShipping } from './customer-shipping.entity';
 @Entity('customer')
 export class Customer extends AuditEntity {
@@ -8,6 +10,12 @@ export class Customer extends AuditEntity {
 
   @Column({ type: 'varchar', length: 20, name: 'first_name' })
   firstName: string;
+
+  @Column({ type: 'int', name: 'category_id' })
+  categoryId: number;
+
+  @Column({ type: 'int', name: 'status_id' })
+  statusId: number;
 
   @Column({ type: 'varchar', length: 20, name: 'last_name' })
   lastName: string;
@@ -38,4 +46,12 @@ export class Customer extends AuditEntity {
 
   @OneToMany(() => CustomerShipping, (customerShipping) => customerShipping.customer)
   customerShipping: CustomerShipping[];
+
+  @OneToOne(() => CustomerCategory, (customerCategory) => customerCategory.customer)
+  @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
+  customerCategory: CustomerCategory;
+
+  @OneToOne(() => CustomerStatus, (customerStatus) => customerStatus.customer)
+  @JoinColumn({ name: 'status_id', referencedColumnName: 'id' })
+  status: CustomerStatus;
 }
