@@ -8,9 +8,8 @@ import { EntityManager, Repository } from 'typeorm';
 export class ProductRepository {
   constructor(@InjectRepository(Product) private readonly repository: Repository<Product>) {}
 
-  async search(pageNumber: number, resultSize: number=10, filters?: Partial<Product>): Promise<IPaginated<Product>> {
+  async search(pageNumber: number, resultSize: number = 10, filters?: Partial<Product>): Promise<IPaginated<Product>> {
     const query = this.repository.createQueryBuilder('product');
-    
 
     // if (filters) {
     //   Object.entries(filters).forEach(([key, value]) => {

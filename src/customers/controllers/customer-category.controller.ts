@@ -1,46 +1,47 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, Query, ParseIntPipe, DefaultValuePipe, ParseBoolPipe } from '@nestjs/common';
-import { CustomerCategoryService } from '../services/customer-category.service';
+import { Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { CreateCustomerCategoryDto } from '../models/dto/create-customer-category.dto';
 import { UpdateCustomerCategoryDto } from '../models/dto/update-customer-category.dto';
-@Controller('customer-categories')
-export class CustomerCategoryController {
-  constructor(private readonly service: CustomerCategoryService) { }
+import { CustomerCategory } from './../models/classes/customer-category.entity';
+import { CustomerCategoryService } from './../services/customer-category.service';
 
-  @Post()
-  create(@Body() dto: CreateCustomerCategoryDto) {
-    return this.service.create(dto);
+@Controller('customer/categories')
+export class CustomerCategoryController {
+  constructor(private readonly customerCategoryService: CustomerCategoryService) {}
+
+  @Get('all')
+  async findAll(): Promise<CustomerCategory[]> {
+    return await this.customerCategoryService.findAll();
   }
 
-  @Get()
-  findAll(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('search') search?: string,
-    @Query('active', new DefaultValuePipe(undefined), ParseBoolPipe) active?: boolean,
-    @Query('includeDeleted', new DefaultValuePipe(false), ParseBoolPipe) includeDeleted?: boolean,
-    @Query('orderBy', new DefaultValuePipe('createdAt')) orderBy?: 'id' | 'name' | 'createdAt' | 'updatedAt',
-    @Query('order', new DefaultValuePipe('DESC')) order?: 'ASC' | 'DESC',
-  ) {
-    return this.service.findAll({ page, limit, search, active, includeDeleted, orderBy, order });
+  @Get('page/:pageNumber')
+  async search(page: number, dto: PaginatedQueryDTO<CustomerCategory>): Promise<IPaginated<CustomerCategory>> {
+    return await this.customerCategoryService.search(page, dto);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.service.findOne(id);
+  async findById(@Param('id', ParseIntPipe) id: number) {
+    return await this.customerCategoryService.findOne(id);
+  }
+
+  @Post()
+  async create(dto: CreateCustomerCategoryDto): Promise<CustomerCategory> {
+    return await this.customerCategoryService.create(dto);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateCustomerCategoryDto) {
-    return this.service.update(id, dto);
+  async update(@Param('id', ParseIntPipe) id: number, dto: UpdateCustomerCategoryDto): Promise<CustomerCategory> {
+    return await this.customerCategoryService.update(id, dto);
+  }
+
+  @Patch('restore/:id')
+  async restore(@Param('id', ParseIntPipe) id: number) {
+    return await this.customerCategoryService.restore(id);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.service.remove(id);
-  }
-
-  @Patch(':id/restore')
-  restore(@Param('id', ParseIntPipe) id: number) {
-    return this.service.restore(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.customerCategoryService.remove(id);
   }
 }

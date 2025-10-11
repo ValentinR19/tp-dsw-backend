@@ -16,7 +16,6 @@ import { PermissionModule } from './permission/permission.module';
 import { ProductModule } from '@product-module/product.module';
 import { CustomerModule } from '@customers-module/customers.module';
 
-
 @Module({
   imports: [
     RouterModule.register(routes),
@@ -55,7 +54,6 @@ import { CustomerModule } from '@customers-module/customers.module';
     PermissionModule,
     ProductModule,
     CustomerModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],

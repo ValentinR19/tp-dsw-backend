@@ -6,11 +6,8 @@ import { ProductCategory } from '@product-module/models/classes/product-category
 
 @Injectable()
 export class ProductCategoryService {
-    constructor(
-        private readonly categoryRepository: ProductCategoryRepository,
-    ) { }
-    async findAll(manager?: EntityManager): Promise<ProductCategory[]> {
-        return await this.categoryRepository.findAll(manager);
-    }
-
+  constructor(private readonly categoryRepository: ProductCategoryRepository) {}
+  async findAll(manager?: EntityManager): Promise<ProductCategory[]> {
+    return await this.categoryRepository.findAll(manager);
+  }
 }

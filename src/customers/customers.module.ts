@@ -7,10 +7,13 @@ import { CustomerRepository } from '@customers-module/repositories/customer.repo
 import { CustomerService } from '@customers-module/services/customers.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CustomerCategoryController } from './controllers/customer-category.controller';
+import { CustomerCategoryService } from './services/customer-category.service';
+import { CustomerCategoryRepository } from './repositories/customer-category.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Customer, CustomerCategory, CustomerStatus, CustomerShipping])],
-  controllers: [CustomerController],
-  providers: [CustomerService, CustomerRepository],
+  controllers: [CustomerController, CustomerCategoryController],
+  providers: [CustomerService, CustomerRepository, CustomerCategoryService, CustomerCategoryRepository],
 })
 export class CustomerModule {}

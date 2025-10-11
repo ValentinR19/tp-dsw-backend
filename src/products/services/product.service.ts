@@ -48,12 +48,12 @@ export class ProductService {
       const product: Partial<Product> = { name: dto.name, description: dto.description, productCategoryId: dto.productCategoryId };
       const savedProduct = await this.save(product, queryRunner.manager);
 
-     if (dto.price) {
+      if (dto.price) {
         await this.priceService.setPriceWithHistory(
           {
             productId: savedProduct.id,
-           price: dto.price,
-           currency: dto.currency,
+            price: dto.price,
+            currency: dto.currency,
           },
           queryRunner.manager,
         );
