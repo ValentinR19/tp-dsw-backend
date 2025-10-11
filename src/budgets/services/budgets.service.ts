@@ -11,9 +11,9 @@ export class BudgetService {
 
   constructor(private readonly budgetRepository: BudgetRepository) {}
 
-  async create(createBudgetDto: CreateBudgetDto): Promise<Budget> {
+  async create(createBudgetDto: CreateBudgetDto, queryRunner?: QueryRunner): Promise<Budget> {
     this.logger.log(`Comienza la creacion de un presupuesto con la siguiente informacion: ${JSON.stringify(createBudgetDto)}`);
-    return this.save(createBudgetDto);
+    return this.save(createBudgetDto, queryRunner);
   }
 
   async findAll(): Promise<Budget[]> {

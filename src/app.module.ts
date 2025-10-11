@@ -1,6 +1,8 @@
+import { BudgetModule } from '@budgets-module/budgets.module';
 import appConfig from '@config-module/app.config';
 import databaseConfig from '@config-module/database.config';
 import { validationSchema } from '@config-module/validation.schema';
+import { CustomerModule } from '@customers-module/customers.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
@@ -9,10 +11,10 @@ import { ClsModule } from 'nestjs-cls';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { PermissionModule } from './permission/permission.module';
+import { RolesModule } from './roles/roles.module';
 import { routes } from './shared/route';
 import { UsersModule } from './users/users.module';
-import { RolesModule } from './roles/roles.module';
-import { PermissionModule } from './permission/permission.module';
 
 @Module({
   imports: [
@@ -50,6 +52,8 @@ import { PermissionModule } from './permission/permission.module';
     AuthModule,
     RolesModule,
     PermissionModule,
+    BudgetModule,
+    CustomerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

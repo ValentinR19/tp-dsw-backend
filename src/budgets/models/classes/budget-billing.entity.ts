@@ -17,7 +17,7 @@ export class BudgetBilling {
   @Column({ type: 'varchar', name: 'consignee_address' })
   consigneeAddress: string;
 
-  @Column({ type: 'decimal', name: 'buyer_tax_id' })
+  @Column({ type: 'int', name: 'buyer_tax_id' })
   buyerTaxId: number;
 
   @Column({ type: 'varchar', length: 30, name: 'shipping_country' })
