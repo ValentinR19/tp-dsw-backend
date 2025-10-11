@@ -13,6 +13,7 @@ import { ProductCategory } from './models/classes/product-category.entity';
 import { ProductCategoryController } from './controllers/product-category.controller';
 import { ProductCategoryService } from './services/product-category.service';
 import { ProductCategoryRepository } from './repositories/product-category.repository';
+
 @Module({
   imports: [TypeOrmModule.forFeature([Product, ProductPrice, ProductPriceHistory,ProductCategory])],
   controllers: [ProductController,ProductCategoryController],

@@ -3,14 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { ProductPriceHistoryRepository } from '../repositories/product-price-history.repository';
 import { ProductPriceRepository } from '../repositories/product-price.repository';
-
+import { ProductPrice } from '@product-module/models/classes/product-price.entity';
 @Injectable()
 export class ProductPriceService {
   constructor(
     private readonly priceRepository: ProductPriceRepository,
     private readonly priceHistoryRepository: ProductPriceHistoryRepository,
   ) {}
-
+      async findByProductId(productId: number, manager?: EntityManager): Promise<ProductPrice | null> {
+        return await this.priceRepository.findByProductId(productId, manager);
+    }
   async setPriceWithHistory(
     params: {
       productId: number;
