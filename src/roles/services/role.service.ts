@@ -8,6 +8,7 @@ import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exce
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { User } from '@users-module/models/classes/user.entity';
+import { QueryRunner } from 'typeorm';
 
 @Injectable()
 export class RoleService {
@@ -43,10 +44,10 @@ export class RoleService {
     }
   }
 
-  async save(role: Partial<Role>): Promise<Role> {
+  async save(role: Partial<Role>, queryRunner?: QueryRunner): Promise<Role> {
     try {
       this.logger.log(`Saving role: ${JSON.stringify(role)}`);
-      const savedRole = await this.roleRepository.save(role);
+      const savedRole = await this.roleRepository.save(role, queryRunner);
       this.logger.log(`Role saved: ${JSON.stringify(savedRole)}`);
       return savedRole;
     } catch (error) {

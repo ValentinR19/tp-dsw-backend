@@ -2,7 +2,7 @@ import { Role } from '@main-module/roles/models/classes/role.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
-import { Repository } from 'typeorm';
+import { QueryRunner, Repository } from 'typeorm';
 @Injectable()
 export class RoleRepository {
   constructor(@InjectRepository(Role) private readonly repository: Repository<Role>) {}
@@ -45,7 +45,6 @@ export class RoleRepository {
         id,
       },
       relations: {
-        //  permissions: true,
         informes: {
           tipoInforme: true,
         },
@@ -63,8 +62,9 @@ export class RoleRepository {
     });
   }
 
-  async save(role: Partial<Role>): Promise<Role> {
-    return this.repository.save(role);
+  async save(role: Partial<Role>, queryRunner?: QueryRunner): Promise<Role> {
+    const repository = queryRunner ? queryRunner.manager.getRepository(Role) : this.repository;
+    return repository.save(role);
   }
 
   async softDelete(id: number): Promise<void> {

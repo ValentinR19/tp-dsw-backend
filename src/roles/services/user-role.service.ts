@@ -7,7 +7,7 @@ import { QueryRunner } from 'typeorm';
 export class UserRoleService {
   constructor(private readonly userRoleRepository: UserRoleRepository) {}
 
-  async save(body: Partial<UserRole>[], queryRunner?): Promise<UserRole[]> {
+  async save(body: Partial<UserRole>[], queryRunner?: QueryRunner): Promise<UserRole[]> {
     return this.userRoleRepository.save(body, queryRunner);
   }
 
