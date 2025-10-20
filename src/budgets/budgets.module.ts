@@ -16,6 +16,7 @@ import { BudgetShippingService } from '@budgets-module/services/budget-shipping.
 import { BudgetService } from '@budgets-module/services/budgets.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UpdateBudgetAction } from './actions/update-budget.action';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling])],
@@ -30,6 +31,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     BudgetBillingService,
     BudgetBillingRepository,
     CreateBudgetAction,
+    UpdateBudgetAction,
   ],
 })
 export class BudgetModule {}

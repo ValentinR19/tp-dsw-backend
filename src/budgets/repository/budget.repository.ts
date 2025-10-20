@@ -22,6 +22,17 @@ export class BudgetRepository {
     return repository.findOneOrFail({ where: { id: id } });
   }
 
+  async findOneByRelations(id: number): Promise<Budget> {
+    return this.repository.findOne({
+      where: { id },
+      relations: {
+        items: true,
+        budgetShipping: true,
+        budgetBilling: true,
+      },
+    });
+  }
+
   async softDelete(id: number): Promise<void> {
     await this.repository.softDelete(id);
   }

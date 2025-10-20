@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Budget } from '@budgets-module/models/classes/budget.entity';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('budget_billing')
 export class BudgetBilling {
@@ -28,4 +29,8 @@ export class BudgetBilling {
 
   @Column({ type: 'varchar', length: 50, name: 'payment_description' })
   paymentDescription: string;
+
+  @OneToOne(() => Budget, (budget) => budget.budgetBilling, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'budget_id', referencedColumnName: 'id' })
+  budget: Budget;
 }

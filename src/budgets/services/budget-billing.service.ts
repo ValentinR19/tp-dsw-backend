@@ -20,4 +20,8 @@ export class BudgetBillingService {
   async create(dto: CreateBudgetBillingDto, queryRunner?: QueryRunner): Promise<BudgetBilling> {
     return this.save(dto, queryRunner);
   }
+
+  async findByBudgetId(budgetId: number, queryRunner?: QueryRunner): Promise<BudgetBilling> {
+    return this.budgetBillingRepository.findByBudgetId(budgetId, queryRunner);
+  }
 }

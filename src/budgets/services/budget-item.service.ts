@@ -15,4 +15,7 @@ export class BudgetItemService {
       throw new NotSavedErrorException(BudgetItem.name, error);
     }
   }
+  deleteByBudgetId(budgetId: number, queryRunner?: QueryRunner): Promise<void> {
+    return this.repository.deleteByBudgetId(budgetId, queryRunner);
+  }
 }

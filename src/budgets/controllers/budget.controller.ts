@@ -1,4 +1,5 @@
 import { CreateBudgetAction } from '@budgets-module/actions/create-budget.action';
+import { UpdateBudgetAction } from '@budgets-module/actions/update-budget.action';
 import { Budget } from '@budgets-module/models/classes/budget.entity';
 import { CreateBudgetDto } from '@budgets-module/models/dto/create-budget.dto';
 import { BudgetService } from '@budgets-module/services/budgets.service';
@@ -13,6 +14,7 @@ export class BudgetController {
   constructor(
     private readonly budgetService: BudgetService,
     private readonly createBudgetAction: CreateBudgetAction,
+    private readonly updateBudgetAction: UpdateBudgetAction,
   ) {}
 
   @Get()
@@ -32,7 +34,7 @@ export class BudgetController {
 
   @Patch(':id')
   async update(@Param('id', ParseIntPipe) id: number, @Body() dto: Partial<CreateBudgetDto>): Promise<Budget> {
-    return this.budgetService.update(id, dto);
+    return this.updateBudgetAction.execute(id, dto);
   }
 
   @Delete(':id')

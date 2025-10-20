@@ -11,4 +11,9 @@ export class BudgetBillingRepository {
     const repository = queryRunner ? queryRunner.manager.getRepository(BudgetBilling) : this.repository;
     return repository.save(billing);
   }
+
+  async findByBudgetId(budgetId: number, queryRunner?: QueryRunner): Promise<BudgetBilling> {
+    const repository = queryRunner ? queryRunner.manager.getRepository(BudgetBilling) : this.repository;
+    return repository.findOne({ where: { budgetId } });
+  }
 }

@@ -11,4 +11,9 @@ export class BudgetShippingRepository {
     const repository = queryRunner ? queryRunner.manager.getRepository(BudgetShipping) : this.repository;
     return repository.save(shipping);
   }
+
+  async findByBudgetId(budgetId: number, queryRunner?: QueryRunner): Promise<BudgetShipping> {
+    const repository = queryRunner ? queryRunner.manager.getRepository(BudgetShipping) : this.repository;
+    return repository.findOne({ where: { budgetId } });
+  }
 }

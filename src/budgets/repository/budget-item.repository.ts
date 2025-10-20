@@ -11,4 +11,9 @@ export class BudgetItemRepository {
     const repository = queryRunner ? queryRunner.manager.getRepository(BudgetItem) : this.repository;
     return repository.save(items);
   }
+
+  async deleteByBudgetId(budgetId: number, queryRunner?: QueryRunner): Promise<void> {
+    const repository = queryRunner ? queryRunner.manager.getRepository(BudgetItem) : this.repository;
+    await repository.delete({ budgetId });
+  }
 }

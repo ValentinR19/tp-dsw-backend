@@ -7,6 +7,7 @@ import { Currency } from '@main-module/shared/models/classes/currency.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { User } from '@users-module/models/classes/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BudgetBilling } from './budget-billing.entity';
 
 @Entity({ name: 'budget' })
 export class Budget extends AuditEntity {
@@ -67,4 +68,7 @@ export class Budget extends AuditEntity {
 
   @OneToOne(() => BudgetShipping, (budgetShipping) => budgetShipping.budget)
   budgetShipping: BudgetShipping;
+
+  @OneToOne(() => BudgetBilling, (budgetBilling) => budgetBilling.budget)
+  budgetBilling: BudgetBilling;
 }

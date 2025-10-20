@@ -20,4 +20,8 @@ export class BudgetShippingService {
   async create(dto: CreateBudgetShippingDto, queryRunner?: QueryRunner): Promise<BudgetShipping> {
     return this.save(dto, queryRunner);
   }
+
+  async findByBudgetId(budgetId: number, queryRunner?: QueryRunner): Promise<BudgetShipping> {
+    return this.budgetShippingRepository.findByBudgetId(budgetId, queryRunner);
+  }
 }
