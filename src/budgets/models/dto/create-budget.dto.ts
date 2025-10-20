@@ -1,17 +1,57 @@
-import { Budget } from '@budgets-module/models/classes/budget.entity';
+import { BudgetItemDto } from '@budgets-module/models/dto/budget-item.dto';
+import { CreateBudgetBillingDto } from '@budgets-module/models/dto/create-budget-billing.dto';
+import { CreateBudgetShippingDto } from '@budgets-module/models/dto/create-budget-shipping.dto';
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
 
-export class CreateBudgetDto extends Budget {
-  // code: string;
-  // sale_number: string;
-  // subtotal: number;
-  // total_discount: number;
-  // total_tax: number;
-  // total: number;
-  // customer_id: string;
-  // seller_id: string;
-  // currency_id: string;
-  // status_id: string;
-  // created_at: Date;
-  // updated_at: Date;
-  // deleted_at?: Date;
+export class CreateBudgetDto {
+  @IsString()
+  code: string;
+
+  @IsString()
+  saleNumber: string;
+
+  @IsNumber()
+  @Min(0)
+  subtotal: number;
+
+  @IsNumber()
+  @Min(0)
+  totalDiscount: number;
+
+  @IsNumber()
+  @Min(0)
+  totalTax: number;
+
+  @IsNumber()
+  @Min(0)
+  total: number;
+
+  @IsNumber()
+  customerId: number;
+
+  @IsNumber()
+  sellerId: number;
+
+  @IsNumber()
+  currencyId: number;
+
+  @IsNumber()
+  statusId: number;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => BudgetItemDto)
+  items?: BudgetItemDto[];
+
+  @IsOptional()
+  @ValidateNested({ message: 'Los datos de envío deben ser válidos.', each: true })
+  @Type(() => CreateBudgetShippingDto)
+  budgetShipping?: CreateBudgetShippingDto;
+
+  @IsOptional()
+  @ValidateNested({ message: 'Los datos de facturación deben ser válidos.', each: true })
+  @Type(() => CreateBudgetBillingDto)
+  budgetBilling?: CreateBudgetBillingDto;
 }

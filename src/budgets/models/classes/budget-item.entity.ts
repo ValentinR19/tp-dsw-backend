@@ -7,31 +7,32 @@ export class BudgetItem {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @ManyToOne(() => Budget, (budget) => budget.items)
-  budget: Budget;
-
   @Column({ type: 'int', name: 'budget_id' })
   budgetId: number;
+
+  @ManyToOne(() => Budget, (budget) => budget.items, { nullable: true })
+  @JoinColumn({ name: 'budget_id', referencedColumnName: 'id' })
+  budget: Budget;
 
   @Column({ type: 'int', name: 'product_id' })
   productId: number;
 
+  @ManyToOne(() => Product, (product) => product.budgetItems, { nullable: true })
+  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
+  product: Product;
+
   @Column({ type: 'int', name: 'quantity' })
   quantity: number;
 
-  @Column({ type: 'decimal', name: 'unit_price' })
+  @Column({ type: 'decimal', precision: 12, scale: 2, name: 'unit_price' })
   unitPrice: number;
 
-  @Column({ type: 'decimal', name: 'discount' })
+  @Column({ type: 'decimal', precision: 12, scale: 2, name: 'discount' })
   discount: number;
 
-  @Column({ type: 'decimal', name: 'tax' })
+  @Column({ type: 'decimal', precision: 12, scale: 2, name: 'tax' })
   tax: number;
 
-  @Column({ type: 'decimal', name: 'total_line' })
+  @Column({ type: 'decimal', precision: 12, scale: 2, name: 'total_line' })
   totalLine: number;
-
-  @ManyToOne(() => Product, (product) => product.budgetItems)
-  @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
-  product: Product;
 }
