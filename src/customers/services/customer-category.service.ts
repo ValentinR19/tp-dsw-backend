@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerCategory } from '../models/classes/customer-category.entity';
-import { CustomerCategoryRepository, ListQuery } from '../repositories/customer-category.repository';
+import { CustomerCategoryRepository } from '../repositories/customer-category.repository';
 
 type CreatePayload = { name?: string; active?: boolean };
 type UpdatePayload = { name?: string; active?: boolean };
@@ -41,11 +41,8 @@ export class CustomerCategoryService {
     }
   }
 
-  async findAll(q: ListQuery) {
-    const { data, total } = await this.repository.findPaginated(q);
-    const page = q.page ?? 1;
-    const limit = q.limit ?? 10;
-    return { data, meta: { total, page, limit, pages: Math.ceil(total / limit) } };
+  async findAll(): Promise<CustomerCategory[]> {
+    return this.repository.findAll();
   }
 
   async findOne(id: number, includeDeleted = false) {

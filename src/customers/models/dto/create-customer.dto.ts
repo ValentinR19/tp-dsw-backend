@@ -1,5 +1,6 @@
 import { Customer } from '@customers-module/models/classes/customer.entity';
-import { IsDateString, IsIn, IsNotEmpty, IsOptional, IsString, Length, Matches } from 'class-validator';
+import { CreateCustomerShippingDto } from '@customers-module/models/dto/customer-shipping.dto';
+import { IsDateString, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Matches } from 'class-validator';
 export class CreateCustomerDto extends Customer {
   @IsString()
   @IsNotEmpty()
@@ -11,6 +12,10 @@ export class CreateCustomerDto extends Customer {
   @Length(2, 50)
   lastName: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  categoryId: number;
+
   @IsOptional()
   @IsString()
   @Length(2, 100)
@@ -19,16 +24,6 @@ export class CreateCustomerDto extends Customer {
   @IsOptional()
   @IsIn(['Hombre', 'Mujer', 'Otro'])
   gender: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Length(5, 100)
-  address: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Matches(/^[0-9]{4,10}$/, { message: 'El zipcode debe ser entre 4 y 10 digitos' })
-  zipCode: string;
 
   @IsString()
   @IsNotEmpty()
@@ -48,4 +43,7 @@ export class CreateCustomerDto extends Customer {
   @IsOptional()
   @IsDateString()
   birthdate?: Date;
+
+  @IsOptional()
+  customerShipping: CreateCustomerShippingDto;
 }

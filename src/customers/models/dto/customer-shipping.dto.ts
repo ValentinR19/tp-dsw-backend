@@ -1,46 +1,60 @@
-import { IsInt, IsOptional, IsString, MaxLength } from 'class-validator';
-import { CustomerShipping } from '../classes/customer-shipping.entity';
+import { CustomerShipping } from '@customers-module/models/classes/customer-shipping.entity';
+import { IsNotEmpty, IsOptional, IsString, Length, Matches } from 'class-validator';
 
-export class CustomerShippingDto extends CustomerShipping {
-  @IsInt()
-  customerId: number;
-
+export class CreateCustomerShippingDto extends CustomerShipping {
   @IsString()
-  @MaxLength(100)
+  @IsNotEmpty()
+  @Length(2, 50)
   recipientFirstName: string;
 
   @IsString()
-  @MaxLength(100)
+  @IsNotEmpty()
+  @Length(2, 50)
   recipientLastName: string;
 
   @IsString()
-  @MaxLength(150)
+  @IsOptional()
+  @Length(2, 100)
   recipientEmail: string;
 
   @IsString()
-  @MaxLength(10)
+  @IsOptional()
+  @Length(2, 10)
   phoneAreaCode: string;
 
   @IsString()
-  @MaxLength(20)
+  @IsOptional()
+  @Matches(/^[0-9+\- ]+$/, { message: 'El número de teléfono contiene caracteres inválidos' })
+  @Length(6, 20)
   phoneNumber: string;
 
   @IsString()
+  @IsOptional()
+  @Length(2, 100)
   alias: string;
 
   @IsString()
+  @IsNotEmpty()
+  @Length(2, 150)
   adress: string;
 
   @IsString()
+  @IsOptional()
+  @Length(1, 10)
   number: string;
 
   @IsString()
+  @IsOptional()
+  @Length(1, 20)
   complement: string;
 
   @IsString()
+  @IsOptional()
+  @Length(3, 10)
   postalCode: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
+  @Length(0, 255)
   deliveryInstructions: string;
 }
