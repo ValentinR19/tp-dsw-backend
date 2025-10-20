@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, Raw } from 'typeorm';
+import { FindOptionsWhere, Raw, Repository } from 'typeorm';
 import { CustomerCategory } from '../models/classes/customer-category.entity';
 
 export type ListQuery = {
@@ -46,6 +46,10 @@ export class CustomerCategoryRepository {
 
   findById(id: number, includeDeleted = false): Promise<CustomerCategory | null> {
     return this.repo.findOne({ where: { id }, withDeleted: includeDeleted });
+  }
+
+  async findAll(): Promise<CustomerCategory[]> {
+    return this.repo.find();
   }
 
   async softDeleteById(id: number): Promise<void> {

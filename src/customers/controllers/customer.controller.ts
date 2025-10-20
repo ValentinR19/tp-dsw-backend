@@ -1,17 +1,19 @@
 import { Customer } from '@customers-module/models/classes/customer.entity';
 import { CreateCustomerDto } from '@customers-module/models/dto/create-customer.dto';
 import { CustomerService } from '@customers-module/services/customers.service';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
-@Controller('customers')
+@Controller()
 @UseGuards(JwtAuthGuard)
 export class CustomerController {
   constructor(private service: CustomerService) {}
 
-  @Get()
-  async findAll(): Promise<Customer[]> {
-    return this.service.findAll();
+  @Get('page/:pageNumber')
+  async search(@Param('pageNumber') page: number, @Query() dto: PaginatedQueryDTO<Customer>): Promise<IPaginated<Customer>> {
+    return await this.service.search(page, dto);
   }
 
   @Get(':id')

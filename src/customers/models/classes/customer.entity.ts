@@ -1,7 +1,7 @@
 import { CustomerCategory } from '@customers-module/models/classes/customer-category.entity';
 import { CustomerStatus } from '@customers-module/models/classes/customer-status.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { CustomerShipping } from './customer-shipping.entity';
 @Entity('customer')
 export class Customer extends AuditEntity {
@@ -14,7 +14,7 @@ export class Customer extends AuditEntity {
   @Column({ type: 'int', name: 'category_id' })
   categoryId: number;
 
-  @Column({ type: 'int', name: 'status_id' })
+  @Column({ type: 'int', name: 'status_id', default: 3 })
   statusId: number;
 
   @Column({ type: 'varchar', length: 20, name: 'last_name' })
@@ -25,12 +25,6 @@ export class Customer extends AuditEntity {
 
   @Column({ type: 'varchar', length: 10, name: 'gender', nullable: true })
   gender: string;
-
-  @Column({ type: 'varchar', length: 30, name: 'address' })
-  address: string;
-
-  @Column({ type: 'decimal', name: 'zip_code' })
-  zipCode: string;
 
   @Column({ type: 'varchar', name: 'type_of_document' })
   typeOfDocument: string;
@@ -44,8 +38,8 @@ export class Customer extends AuditEntity {
   @Column({ default: true, type: 'boolean', name: 'active' })
   active: boolean;
 
-  @OneToMany(() => CustomerShipping, (customerShipping) => customerShipping.customer)
-  customerShipping: CustomerShipping[];
+  @OneToOne(() => CustomerShipping, (customerShipping) => customerShipping.customer, { cascade: true })
+  customerShipping: CustomerShipping;
 
   @OneToOne(() => CustomerCategory, (customerCategory) => customerCategory.customer)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })

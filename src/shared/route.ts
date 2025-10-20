@@ -1,3 +1,4 @@
+import { CustomerModule } from '@customers-module/customers.module';
 import { AuthModule } from '@main-module/auth/auth.module';
 import { PermissionModule } from '@main-module/permission/permission.module';
 import { RolesModule } from '@main-module/roles/roles.module';
@@ -21,5 +22,9 @@ export const routes: Routes = [
   {
     path: 'permissions',
     module: PermissionModule,
+  },
+  {
+    path: 'customers',
+    module: CustomerModule,
   },
 ];

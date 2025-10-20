@@ -4,6 +4,8 @@ import { CustomerRepository } from '@customers-module/repositories/customer.repo
 import { Injectable, Logger } from '@nestjs/common';
 import { NotFoundErrorException } from '@shared-module/exceptions/not-found.exception';
 import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exception';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { DeepPartial } from 'typeorm';
 
 @Injectable()
@@ -12,8 +14,9 @@ export class CustomerService {
 
   constructor(private readonly customerRepository: CustomerRepository) {}
 
-  async findAll(): Promise<Customer[]> {
-    return this.customerRepository.findAll();
+  async search(page: number, dto: PaginatedQueryDTO<Customer>): Promise<IPaginated<Customer>> {
+    const { results, filters, global } = dto;
+    return await this.customerRepository.search(page, results, filters, global);
   }
 
   async findById(id: number): Promise<Customer> {
@@ -27,9 +30,12 @@ export class CustomerService {
     }
   }
 
-  async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
-    this.logger.log(`Creating customer: ${JSON.stringify(createCustomerDto)}`);
-    return this.save(createCustomerDto);
+  async create(dto: CreateCustomerDto): Promise<Customer> {
+    this.logger.log(`Creating customer: ${JSON.stringify(dto)}`);
+    if (!dto.statusId) {
+      dto.statusId = 1;
+    }
+    return this.save(dto);
   }
 
   async update(id: number, updateCustomerDto: DeepPartial<CreateCustomerDto>): Promise<Customer> {

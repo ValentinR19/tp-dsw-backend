@@ -1,13 +1,10 @@
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Customer } from './customer.entity';
 
 @Entity('customer_shipping')
 export class CustomerShipping extends AuditEntity {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
-  id: number;
-
-  @Column({ type: 'int', name: 'customer_id' })
+  @PrimaryColumn({ type: 'int', name: 'customer_id' })
   customerId: number;
 
   @Column({ type: 'varchar', name: 'recipient_first_name' })
@@ -31,19 +28,19 @@ export class CustomerShipping extends AuditEntity {
   @Column({ type: 'varchar', name: 'adress' })
   adress: string;
 
-  @Column({ type: 'int', name: 'number' })
+  @Column({ type: 'varchar', name: 'number' })
   number: string;
 
-  @Column({ type: 'int', name: 'complement' })
+  @Column({ type: 'varchar', name: 'complement' })
   complement: string;
 
-  @Column({ type: 'int', name: 'postal_code' })
+  @Column({ type: 'varchar', name: 'postal_code' })
   postalCode: string;
 
   @Column({ type: 'varchar', name: 'delivery_instructions' })
   deliveryInstructions: string;
 
-  @ManyToOne(() => Customer, (customer) => customer.customerShipping)
+  @OneToOne(() => Customer, (customer) => customer.customerShipping)
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
   customer: Customer;
 }
