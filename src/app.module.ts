@@ -7,6 +7,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductModule } from '@product-module/product.module';
 import { ClsModule } from 'nestjs-cls';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -54,6 +55,7 @@ import { UsersModule } from './users/users.module';
     PermissionModule,
     BudgetModule,
     CustomerModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
