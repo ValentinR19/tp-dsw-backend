@@ -5,7 +5,7 @@ import { UpdateProductDto } from '@product-module/models/dtos/update-product.dto
 import { ProductService } from '@product-module/services/product.service';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
-@Controller('products')
+@Controller()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

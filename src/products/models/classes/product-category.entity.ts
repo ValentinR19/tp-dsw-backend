@@ -1,6 +1,6 @@
+import { Product } from '@product-module/models/classes/product.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Product } from './product.entity';
 
 @Entity('product_categories')
 export class ProductCategory extends AuditEntity {
