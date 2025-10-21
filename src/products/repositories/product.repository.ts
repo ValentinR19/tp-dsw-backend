@@ -8,8 +8,12 @@ import { EntityManager, Repository } from 'typeorm';
 export class ProductRepository {
   constructor(@InjectRepository(Product) private readonly repository: Repository<Product>) {}
 
-  async search(pageNumber: number, resultSize: number, filters?: Partial<Product>): Promise<IPaginated<Product>> {
+  async search(pageNumber: number, resultSize: number, filters?: Partial<Product>, global?: string): Promise<IPaginated<Product>> {
     const query = this.repository.createQueryBuilder('product');
+
+    if (global) {
+      query.andWhere('product.name LIKE :global OR product.description LIKE :global', { global: `%${global}%` });
+    }
 
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {

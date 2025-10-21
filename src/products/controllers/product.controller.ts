@@ -3,6 +3,7 @@ import { Product } from '@product-module/models/classes/product.entity';
 import { CreateProductDto } from '@product-module/models/dtos/create-product.dto';
 import { UpdateProductDto } from '@product-module/models/dtos/update-product.dto';
 import { ProductService } from '@product-module/services/product.service';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
 @Controller()
@@ -10,8 +11,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get('page/:pageNumber')
-  async findAll(@Param('pageNumber)', ParseIntPipe) page: number, @Query('resultSize') resultSize: number = 15, @Query() filter?: Partial<Product>): Promise<IPaginated<Product>> {
-    return await this.productService.search(page, resultSize, filter);
+  async search(@Param('pageNumber', ParseIntPipe) page: number, @Query() dto: PaginatedQueryDTO<Product>): Promise<IPaginated<Product>> {
+    return await this.productService.search(page, dto);
   }
 
   @Get(':id')

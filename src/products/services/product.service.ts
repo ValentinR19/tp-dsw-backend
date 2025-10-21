@@ -6,6 +6,7 @@ import { ProductRepository } from '@product-module/repositories/product.reposito
 import { ProductPriceService } from '@product-module/services/product-price.service';
 import { NotFoundErrorException } from '@shared-module/exceptions/not-found.exception';
 import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exception';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { DataSource, EntityManager } from 'typeorm';
 
@@ -27,8 +28,10 @@ export class ProductService {
     }
   }
 
-  async search(pageNumber: number, resultSize: number, filters?: Partial<Product>): Promise<IPaginated<Product>> {
-    return await this.productRepository.search(pageNumber, resultSize, filters);
+  async search(pageNumber: number, dto: PaginatedQueryDTO<Product>): Promise<IPaginated<Product>> {
+    const { results, filters, global } = dto;
+
+    return await this.productRepository.search(pageNumber, results, filters, global);
   }
 
   async delete(id: number): Promise<void> {
