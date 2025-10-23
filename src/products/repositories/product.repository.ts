@@ -42,7 +42,7 @@ export class ProductRepository {
 
   async findById(id: number, manager?: EntityManager): Promise<Product | null> {
     const repository = manager ? manager.getRepository(Product) : this.repository;
-    return await repository.findOneOrFail({ where: { id } });
+    return await repository.findOneOrFail({ where: { id }, relations: {productCategory:true,price:true} });
   }
 
   async delete(id: number, manager?: EntityManager): Promise<void> {
