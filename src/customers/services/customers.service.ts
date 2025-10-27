@@ -30,6 +30,13 @@ export class CustomerService {
     }
   }
 
+  async findAll(): Promise<Customer[]> {
+    this.logger.log(`Finding all customers`);
+    const customers = await this.customerRepository.findAll();
+    this.logger.log(`Customers found: ${JSON.stringify(customers)}`);
+    return customers;
+  }
+
   async create(dto: CreateCustomerDto): Promise<Customer> {
     this.logger.log(`Creating customer: ${JSON.stringify(dto)}`);
     if (!dto.statusId) {

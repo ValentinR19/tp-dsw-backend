@@ -34,6 +34,13 @@ export class ProductService {
     return await this.productRepository.search(pageNumber, results, filters, global);
   }
 
+  async findAll(): Promise<Product[]> {
+    this.logger.log(`Finding all products`);
+    const products = await this.productRepository.findAll();
+    this.logger.log(`Products found: ${JSON.stringify(products)}`);
+    return products;
+  }
+
   async delete(id: number): Promise<void> {
     try {
       return await this.productRepository.delete(id);

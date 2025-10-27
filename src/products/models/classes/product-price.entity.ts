@@ -9,7 +9,7 @@ export class ProductPrice {
   @Column({ type: 'int', name: 'product_id' })
   productId: number;
 
-  @Column({ type: 'decimal', name: 'price', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', name: 'price', precision: 18, scale: 2 })
   price: number;
 
   @Column({ type: 'varchar', name: 'currency', length: 3, default: 'ARS' })

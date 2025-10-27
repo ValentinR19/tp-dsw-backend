@@ -21,6 +21,11 @@ export class CustomerController {
     return this.service.findById(id);
   }
 
+  @Get()
+  async findAll(): Promise<Customer[]> {
+    return this.service.findAll();
+  }
+
   @Post()
   async create(@Body() dto: CreateCustomerDto): Promise<Customer> {
     return this.service.create(dto);
