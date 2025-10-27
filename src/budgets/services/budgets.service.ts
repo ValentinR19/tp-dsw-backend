@@ -1,6 +1,8 @@
 import { Budget } from '@budgets-module/models/classes/budget.entity';
 import { BudgetRepository } from '@budgets-module/repository/budget.repository';
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { DeepPartial, QueryRunner } from 'typeorm';
 
 @Injectable()
@@ -8,6 +10,11 @@ export class BudgetService {
   private logger: Logger = new Logger(BudgetService.name);
 
   constructor(private readonly budgetRepository: BudgetRepository) {}
+
+  async search(page: number, dto: PaginatedQueryDTO<Budget>): Promise<IPaginated<Budget>> {
+    const { results, filters, global } = dto;
+    return this.budgetRepository.search(page, results, filters, global);
+  }
 
   async findAll(): Promise<Budget[]> {
     return this.budgetRepository.findAll();

@@ -4,9 +4,11 @@ import { Budget } from '@budgets-module/models/classes/budget.entity';
 import { CreateBudgetDto } from '@budgets-module/models/dto/create-budget.dto';
 import { BudgetService } from '@budgets-module/services/budgets.service';
 import { IUserPayload } from '@main-module/auth/models/interfaces/payload.interface';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { LoggedUser } from '@shared-module/decorators/logged-user.decorator';
 import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
+import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
 @Controller('budgets')
 @UseGuards(JwtAuthGuard)
@@ -16,6 +18,11 @@ export class BudgetController {
     private readonly createBudgetAction: CreateBudgetAction,
     private readonly updateBudgetAction: UpdateBudgetAction,
   ) {}
+
+  @Get('page/:pageNumber')
+  async search(@Param('pageNumber', ParseIntPipe) page: number, @Query() dto: PaginatedQueryDTO<Budget>): Promise<IPaginated<Budget>> {
+    return this.budgetService.search(page, dto);
+  }
 
   @Get()
   async findAll(): Promise<Budget[]> {
