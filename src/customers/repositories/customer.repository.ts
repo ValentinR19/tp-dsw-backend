@@ -35,6 +35,10 @@ export class CustomerRepository {
     });
   }
 
+  async findAll(): Promise<Customer[]> {
+    return this.repository.find();
+  }
+
   async save(customer: DeepPartial<Customer>, manager?: EntityManager): Promise<Customer> {
     const repository = manager ? manager.getRepository(Customer) : this.repository;
     return repository.save(customer);

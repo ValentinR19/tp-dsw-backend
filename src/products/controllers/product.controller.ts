@@ -20,6 +20,11 @@ export class ProductController {
     return await this.productService.findById(id);
   }
 
+  @Get()
+  async findAll(): Promise<Product[]> {
+    return await this.productService.findAll();
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateProductDto): Promise<Product> {
