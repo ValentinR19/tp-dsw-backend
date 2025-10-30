@@ -1,3 +1,4 @@
+import { BudgetModule } from '@budgets-module/budgets.module';
 import { CustomerModule } from '@customers-module/customers.module';
 import { AuthModule } from '@main-module/auth/auth.module';
 import { PermissionModule } from '@main-module/permission/permission.module';
@@ -11,7 +12,6 @@ export const routes: Routes = [
     path: 'users',
     module: UsersModule,
   },
-
   {
     path: 'auth',
     module: AuthModule,
@@ -31,5 +31,9 @@ export const routes: Routes = [
   {
     path: 'products',
     module: ProductModule,
+  },
+  {
+    path: 'budgets',
+    module: BudgetModule,
   },
 ];
