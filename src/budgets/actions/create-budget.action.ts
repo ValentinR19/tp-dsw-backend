@@ -52,6 +52,7 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
         }
         await this.budgetItemService.save(itemsPayload, queryRunner);
       }
+
       dto.budgetShipping && (await this.budgetShippingService.create({ ...dto.budgetShipping, budgetId: budget.id }, queryRunner));
 
       dto.budgetBilling && (await this.budgetBillingService.create({ ...dto.budgetBilling, budgetId: budget.id }, queryRunner));

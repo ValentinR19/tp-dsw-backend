@@ -50,4 +50,15 @@ export class BudgetService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async update(id: number, dto: Partial<Budget>, queryRunner?: QueryRunner): Promise<Budget> {
+    try {
+      this.logger.log(`Comienza la actualizacion del presupuesto con id: ${id}`);
+      const updatedBudget = await this.budgetRepository.save({ id, ...dto }, queryRunner);
+      this.logger.log(`Se actualizo el presupuesto con id: ${id}`);
+      return updatedBudget;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

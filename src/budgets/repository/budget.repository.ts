@@ -9,7 +9,11 @@ export class BudgetRepository {
   constructor(@InjectRepository(Budget) private readonly repository: Repository<Budget>) {}
 
   async search(page: number, results: number, filters?: Partial<Budget>, global?: string): Promise<IPaginated<Budget>> {
-    const queryBuilder = this.repository.createQueryBuilder('budget').leftJoinAndSelect('budget.customer', 'customer').leftJoinAndSelect('budget.status', 'status');
+    const queryBuilder = this.repository
+      .createQueryBuilder('budget')
+      .leftJoinAndSelect('budget.customer', 'customer')
+      .leftJoinAndSelect('budget.status', 'status')
+      .leftJoinAndSelect('budget.seller', 'seller');
 
     if (filters) {
       Object.keys(filters).forEach((key) => {

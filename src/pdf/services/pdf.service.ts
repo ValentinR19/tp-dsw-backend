@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { convertHtmlToPdfMake } from 'html-to-pdfmake';
 import { JSDOM } from 'jsdom';
 import * as path from 'path';
 import * as PdfPrinter from 'pdfmake';
+
+const htmlToPdfmake = require('html-to-pdfmake');
 
 @Injectable()
 export class PdfService {
   async generatePdfFromHtml(html: string, options?: { format?: string }): Promise<Buffer> {
     const dom = new JSDOM(`<!DOCTYPE html><html><body>${html}</body></html>`);
-    const pdfContent = convertHtmlToPdfMake(html, { window: dom.window });
+    const pdfContent = htmlToPdfmake(html, { window: dom.window });
 
     const fonts = {
       Roboto: {
-        normal: path.resolve('node_modules/pdfmake/fonts/Roboto-Regular.ttf'),
-        bold: path.resolve('node_modules/pdfmake/fonts/Roboto-Medium.ttf'),
-        italics: path.resolve('node_modules/pdfmake/fonts/Roboto-Italic.ttf'),
-        bolditalics: path.resolve('node_modules/pdfmake/fonts/Roboto-MediumItalic.ttf'),
+        normal: path.join(process.cwd(), 'fonts/roboto/static/Roboto-Regular.ttf'),
+        bold: path.join(process.cwd(), 'fonts/roboto/static/Roboto-Bold.ttf'),
+        italics: path.join(process.cwd(), 'fonts/roboto/static/Roboto-Italic.ttf'),
+        bolditalics: path.join(process.cwd(), 'fonts/roboto/static/Roboto-BoldItalic.ttf'),
       },
     };
-
     const printer = new PdfPrinter(fonts);
 
     const docDefinition = {
