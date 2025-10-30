@@ -1,5 +1,5 @@
 import { BudgetBilling } from '@budgets-module/models/classes/budget-billing.entity';
-import { IsOptional, IsString, Max } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateBudgetBillingDto extends BudgetBilling {
   @IsString()
@@ -19,7 +19,6 @@ export class CreateBudgetBillingDto extends BudgetBilling {
   consigneeCompany: string;
 
   @IsString()
-  @Max(30)
   @IsOptional()
   shippingCountry: string;
 

@@ -33,7 +33,6 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
       const budgetPayload: Partial<Budget> = {
         customerId: dto.customerId,
         sellerId: user.id,
-        currencyId: dto.currencyId,
         subtotal: dto.subtotal,
         totalDiscount: dto.totalDiscount,
         totalTax: dto.totalTax,
@@ -41,6 +40,7 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
       };
       const budget = await this.budgetService.save(budgetPayload, queryRunner);
       budget.code = `BUD-${budget.id.toString().padStart(5, '0')}`;
+
       await this.budgetService.save({ id: budget.id, code: budget.code }, queryRunner);
       let itemsPayload: BudgetItem[] = [];
       if (dto.items && dto.items.length > 0) {
@@ -52,7 +52,6 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
         }
         await this.budgetItemService.save(itemsPayload, queryRunner);
       }
-
       dto.budgetShipping && (await this.budgetShippingService.create({ ...dto.budgetShipping, budgetId: budget.id }, queryRunner));
 
       dto.budgetBilling && (await this.budgetBillingService.create({ ...dto.budgetBilling, budgetId: budget.id }, queryRunner));
@@ -61,6 +60,7 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
       return budget;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      this.logger.error(`Error creating budget: ${error}`);
       throw error;
     } finally {
       await queryRunner.release();

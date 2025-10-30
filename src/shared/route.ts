@@ -13,7 +13,6 @@ export const routes: Routes = [
     path: 'users',
     module: UsersModule,
   },
-
   {
     path: 'auth',
     module: AuthModule,
