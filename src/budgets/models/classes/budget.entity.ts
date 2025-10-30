@@ -3,7 +3,6 @@ import { BudgetShipping } from '@budgets-module/models/classes/budget-shipping.e
 import { BudgetStatusHistory } from '@budgets-module/models/classes/budget-status-history.entity';
 import { BudgetStatus } from '@budgets-module/models/classes/budget-status.entity';
 import { Customer } from '@customers-module/models/classes/customer.entity';
-import { Currency } from '@main-module/shared/models/classes/currency.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { User } from '@users-module/models/classes/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -14,10 +13,10 @@ export class Budget extends AuditEntity {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column({ type: 'varchar', name: 'code', unique: true })
+  @Column({ type: 'varchar', name: 'code', unique: true, default: null, nullable: true })
   code: string;
 
-  @Column({ type: 'varchar', name: 'sale_number', unique: true })
+  @Column({ type: 'varchar', name: 'sale_number', unique: true, default: null, nullable: true })
   saleNumber: string;
 
   @Column({ type: 'decimal', name: 'subtotal' })
@@ -32,14 +31,11 @@ export class Budget extends AuditEntity {
   @Column({ type: 'decimal', name: 'total' })
   total: number;
 
-  @Column({ type: 'int', name: 'customer_id' })
+  @Column({ type: 'int', name: 'customer_id', nullable: true })
   customerId: number;
 
-  @Column({ type: 'int', name: 'seller_id' })
+  @Column({ type: 'int', name: 'seller_id', nullable: true })
   sellerId: number;
-
-  @Column({ type: 'int', name: 'currency_id' })
-  currencyId: number;
 
   @Column({ type: 'int', name: 'status_id', default: 1 })
   statusId: number;
@@ -61,10 +57,6 @@ export class Budget extends AuditEntity {
   @ManyToOne(() => Customer, { nullable: true })
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
   customer: Customer;
-
-  @ManyToOne(() => Currency, (currency) => currency.budgets, { nullable: true })
-  @JoinColumn({ name: 'currency_id', referencedColumnName: 'id' })
-  currency: Currency;
 
   @OneToOne(() => BudgetShipping, (budgetShipping) => budgetShipping.budget)
   budgetShipping: BudgetShipping;

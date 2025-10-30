@@ -6,9 +6,11 @@ import { IsArray, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'cl
 
 export class CreateBudgetDto {
   @IsString()
+  @IsOptional()
   code: string;
 
   @IsString()
+  @IsOptional()
   saleNumber: string;
 
   @IsNumber()
@@ -31,12 +33,14 @@ export class CreateBudgetDto {
   customerId: number;
 
   @IsNumber()
+  @IsOptional()
   sellerId: number;
 
   @IsNumber()
   currencyId: number;
 
   @IsNumber()
+  @IsOptional()
   statusId: number;
 
   @IsOptional()

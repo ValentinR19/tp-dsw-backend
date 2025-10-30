@@ -1,7 +1,6 @@
-import { Budget } from '@budgets-module/models/classes/budget.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('currencies')
 export class Currency extends AuditEntity {
@@ -38,7 +37,4 @@ export class Currency extends AuditEntity {
 
   @Column('varchar', { name: 'code', length: 10 })
   code: string;
-
-  @OneToMany(() => Budget, (budget) => budget.currency)
-  budgets: Budget[];
 }

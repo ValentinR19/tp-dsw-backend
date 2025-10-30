@@ -36,7 +36,7 @@ export class BudgetService {
       this.logger.log(`Se elimina el presupuesto con el id: ${id}`);
       await this.budgetRepository.softDelete(id);
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -47,7 +47,7 @@ export class BudgetService {
       this.logger.log(`Se creo el presupuesto con el id: ${savedBudget.id}`);
       return savedBudget;
     } catch (error) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error);
     }
   }
 }

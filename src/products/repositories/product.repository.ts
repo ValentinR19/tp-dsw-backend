@@ -46,7 +46,7 @@ export class ProductRepository {
   }
 
   async findAll(): Promise<Product[]> {
-    return this.repository.find();
+    return this.repository.find({ relations: { price: true, productCategory: true } });
   }
 
   async delete(id: number, manager?: EntityManager): Promise<void> {

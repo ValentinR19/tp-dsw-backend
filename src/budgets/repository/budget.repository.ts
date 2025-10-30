@@ -36,7 +36,7 @@ export class BudgetRepository {
 
   async findAll(queryRunner?: QueryRunner): Promise<Budget[]> {
     const repository = queryRunner ? queryRunner.manager.getRepository(Budget) : this.repository;
-    return repository.find();
+    return repository.find({ relations: { customer: true, status: true } });
   }
 
   async findById(id: number, queryRunner?: QueryRunner): Promise<Budget> {
