@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
-@Controller('budgets')
+@Controller()
 @UseGuards(JwtAuthGuard)
 export class BudgetController {
   constructor(
@@ -31,7 +31,7 @@ export class BudgetController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<Budget> {
-    return this.budgetService.findOne(id);
+    return this.budgetService.findById(id);
   }
 
   @Post()

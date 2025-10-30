@@ -27,7 +27,7 @@ export class UpdateBudgetAction {
     try {
       this.logger.log(`Updating budget ID ${id} with data: ${JSON.stringify(dto)}`);
 
-      await this.budgetService.findOne(id, queryRunner);
+      await this.budgetService.findById(id, queryRunner);
 
       await this.budgetService.save(
         {
@@ -69,7 +69,7 @@ export class UpdateBudgetAction {
       await queryRunner.commitTransaction();
 
       // 🔄 Devuelve con relaciones actualizadas
-      return this.budgetService.findOne(id);
+      return this.budgetService.findById(id);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

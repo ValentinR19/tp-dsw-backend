@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as handlebars from 'handlebars';
+import * as Handlebars from 'handlebars';
 
 @Injectable()
 export class TemplateCompilerService {

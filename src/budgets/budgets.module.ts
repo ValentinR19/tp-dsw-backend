@@ -1,4 +1,5 @@
 import { CreateBudgetAction } from '@budgets-module/actions/create-budget.action';
+import { BudgetPdfController } from '@budgets-module/controllers/budget-pdf.controller';
 import { BudgetController } from '@budgets-module/controllers/budget.controller';
 import { BudgetBilling } from '@budgets-module/models/classes/budget-billing.entity';
 import { BudgetItem } from '@budgets-module/models/classes/budget-item.entity';
@@ -12,15 +13,17 @@ import { BudgetShippingRepository } from '@budgets-module/repository/budget-ship
 import { BudgetRepository } from '@budgets-module/repository/budget.repository';
 import { BudgetBillingService } from '@budgets-module/services/budget-billing.service';
 import { BudgetItemService } from '@budgets-module/services/budget-item.service';
+import { BudgetPdfService } from '@budgets-module/services/budget-pdf.service';
 import { BudgetShippingService } from '@budgets-module/services/budget-shipping.service';
 import { BudgetService } from '@budgets-module/services/budgets.service';
+import { PdfModule } from '@main-module/pdf/pdf.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateBudgetAction } from './actions/update-budget.action';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling])],
-  controllers: [BudgetController],
+  imports: [TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling]), PdfModule],
+  controllers: [BudgetController, BudgetPdfController],
   providers: [
     BudgetService,
     BudgetRepository,
@@ -32,6 +35,7 @@ import { UpdateBudgetAction } from './actions/update-budget.action';
     BudgetBillingRepository,
     CreateBudgetAction,
     UpdateBudgetAction,
+    BudgetPdfService,
   ],
 })
 export class BudgetModule {}

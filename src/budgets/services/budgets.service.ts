@@ -20,7 +20,7 @@ export class BudgetService {
     return this.budgetRepository.findAll();
   }
 
-  async findOne(id: number, queryRunner?: QueryRunner): Promise<Budget> {
+  async findById(id: number, queryRunner?: QueryRunner): Promise<Budget> {
     try {
       this.logger.log(`Se busca el presupuesto con el id: ${id}`);
       const budget = await this.budgetRepository.findById(id, queryRunner);
