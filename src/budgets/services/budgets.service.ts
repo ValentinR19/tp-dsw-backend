@@ -20,7 +20,7 @@ export class BudgetService {
     return this.budgetRepository.findAll();
   }
 
-  async findOne(id: number, queryRunner?: QueryRunner): Promise<Budget> {
+  async findById(id: number, queryRunner?: QueryRunner): Promise<Budget> {
     try {
       this.logger.log(`Se busca el presupuesto con el id: ${id}`);
       const budget = await this.budgetRepository.findById(id, queryRunner);
@@ -46,6 +46,17 @@ export class BudgetService {
       const savedBudget = await this.budgetRepository.save(budget, queryRunner);
       this.logger.log(`Se creo el presupuesto con el id: ${savedBudget.id}`);
       return savedBudget;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async update(id: number, dto: Partial<Budget>, queryRunner?: QueryRunner): Promise<Budget> {
+    try {
+      this.logger.log(`Comienza la actualizacion del presupuesto con id: ${id}`);
+      const updatedBudget = await this.budgetRepository.save({ id, ...dto }, queryRunner);
+      this.logger.log(`Se actualizo el presupuesto con id: ${id}`);
+      return updatedBudget;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
