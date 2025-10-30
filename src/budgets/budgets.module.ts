@@ -26,7 +26,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateBudgetAction } from './actions/update-budget.action';
 import { City } from './locations/cities.entity';
+import { StateController } from './locations/controllers/state.controller';
 import { Country } from './locations/countries.entity';
+import { StatesRepository } from './locations/repository/states.repository';
+import { StatesService } from './locations/services/states.service';
 import { State } from './locations/states.entity';
 
 @Module({
@@ -34,7 +37,7 @@ import { State } from './locations/states.entity';
     TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling, BudgetStatusTransition, City, State, Country]),
     PdfModule,
   ],
-  controllers: [BudgetController, BudgetPdfController, BudgetStatusTransitionController],
+  controllers: [BudgetController, BudgetPdfController, BudgetStatusTransitionController, StateController],
   providers: [
     BudgetService,
     BudgetRepository,
@@ -50,6 +53,8 @@ import { State } from './locations/states.entity';
     BudgetStatusTransitionService,
     BudgetStatusTransitionRepository,
     BudgetChangeStatusService,
+    StatesService,
+    StatesRepository,
   ],
 })
 export class BudgetModule {}
