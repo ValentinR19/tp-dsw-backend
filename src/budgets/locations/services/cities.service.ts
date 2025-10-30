@@ -1,29 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-import {City} from '../cities.entity'
+import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
+import { QueryRunner } from 'typeorm';
+import { City } from '../cities.entity';
+import { CitiesRepository } from '../repository/cities.repository';
 @Injectable()
 export class CitiesService {
-  constructor(
-    @InjectRepository(City) private readonly citiesRepo: Repository<City>,
-  ) {}
+  constructor(private readonly cityRepository: CitiesRepository) {}
 
-  // Ciudades por provincia/estado
-  async findByState(stateId: number) {
-    return this.citiesRepo.find({
-      where: { idState: stateId },
-      select: { id: true, name: true },
-      order: { name: 'ASC' },
-    });
+  async search(page: number, results: number, filters?: Partial<City>, global?: string): Promise<IPaginated<City>> {
+    return this.cityRepository.search(page, results, filters, global);
   }
 
-  // (Opcional) Búsqueda por nombre dentro de un país
-  async searchByNameInCountry(q: string, countryId: number, limit = 20) {
-    return this.citiesRepo.find({
-      where: { country: { id: countryId }, name: ILike(`%${q}%`) },
-      select: { id: true, name: true },
-      order: { name: 'ASC' },
-      take: limit,
-    });
+  async findAll(queryRunner?: QueryRunner) {
+    return this.cityRepository.findAll(queryRunner);
+  }
+  async findOne(id: number, queryRunner?: QueryRunner) {
+    return this.cityRepository.findById(id, queryRunner);
+  }
+
+  async findByCountryId(countryId: number) {
+    return this.cityRepository.findByCountryId(countryId);
   }
 }

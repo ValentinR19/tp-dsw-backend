@@ -9,8 +9,7 @@ export class StatesRepository {
   constructor(@InjectRepository(State) private readonly repository: Repository<State>) {}
 
   async search(page: number, results: number, filters?: Partial<State>, global?: string): Promise<IPaginated<State>> {
-    const qb = this.repository.createQueryBuilder('state')
-     
+    const qb = this.repository.createQueryBuilder('state');
 
     if (filters) {
       Object.keys(filters).forEach((key) => {
@@ -24,7 +23,8 @@ export class StatesRepository {
       });
     }
 
-    const [data, count] = await qb.orderBy('state.name', 'ASC')
+    const [data, count] = await qb
+      .orderBy('state.name', 'ASC')
       .skip((page - 1) * results)
       .take(results)
       .getManyAndCount();
@@ -43,7 +43,8 @@ export class StatesRepository {
   }
 
   async findByCountryId(countryId: number): Promise<State[]> {
-    return this.repository.createQueryBuilder('state')
+    return this.repository
+      .createQueryBuilder('state')
       .where('state.country_id = :countryId', { countryId }) // usa el nombre de columna
       .orderBy('state.name', 'ASC')
       .getMany();

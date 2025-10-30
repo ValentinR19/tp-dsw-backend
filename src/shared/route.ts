@@ -35,6 +35,6 @@ export const routes: Routes = [
   },
   {
     path: 'budgets',
-    module: BudgetModule
-  }
+    module: BudgetModule,
+  },
 ];

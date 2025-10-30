@@ -1,7 +1,7 @@
- import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { State } from './states.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Country } from './countries.entity';
- @Entity({ name: 'cities' })
+import { State } from './states.entity';
+@Entity({ name: 'cities' })
 export class City {
   @PrimaryGeneratedColumn({ type: 'mediumint', unsigned: true })
   id: number;
@@ -33,6 +33,7 @@ export class City {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
+    precision: 0,
   })
   createdAt: Date;
 
@@ -41,6 +42,7 @@ export class City {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
     name: 'updated_at',
+    precision: 0,
   })
   updatedAt: Date;
 
@@ -63,5 +65,4 @@ export class City {
   @ManyToOne(() => Country, (country) => country.cities)
   @JoinColumn({ name: 'country_id', referencedColumnName: 'id' })
   country: Country;
-
 }

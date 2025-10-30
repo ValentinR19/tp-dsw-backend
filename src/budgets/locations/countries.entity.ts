@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { City } from './cities.entity';
 import { State } from './states.entity';
 @Entity({ name: 'countries' })
@@ -72,7 +72,7 @@ export class Country {
   @Column({ type: 'varchar', length: 191, nullable: true })
   emojiU: string;
 
-  @Column({ type: 'timestamp', nullable: true, name: 'created_at' })
+  @Column({ type: 'timestamp', nullable: true, name: 'created_at', precision: 0 })
   createdAt: Date;
 
   @Column({
@@ -80,6 +80,7 @@ export class Country {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
     name: 'updated_at',
+    precision: 0,
   })
   updatedAt: Date;
 

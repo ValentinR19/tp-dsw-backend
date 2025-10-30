@@ -23,7 +23,8 @@ export class CountriesRepository {
       });
     }
 
-    const [data, count] = await qb.orderBy('country.name', 'ASC')
+    const [data, count] = await qb
+      .orderBy('country.name', 'ASC')
       .skip((page - 1) * results)
       .take(results)
       .getManyAndCount();

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, QueryRunner, Repository } from 'typeorm';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
+import { DeepPartial, QueryRunner, Repository } from 'typeorm';
 import { City } from '../cities.entity';
 
 @Injectable()
@@ -9,8 +9,9 @@ export class CitiesRepository {
   constructor(@InjectRepository(City) private readonly repository: Repository<City>) {}
 
   async search(page: number, results: number, filters?: Partial<City>, global?: string): Promise<IPaginated<City>> {
-    const qb = this.repository.createQueryBuilder('city')
-      .leftJoinAndSelect('city.state', 'state')     // si tus relaciones existen
+    const qb = this.repository
+      .createQueryBuilder('city')
+      .leftJoinAndSelect('city.state', 'state') // si tus relaciones existen
       .leftJoinAndSelect('city.country', 'country');
 
     if (filters) {
@@ -25,7 +26,8 @@ export class CitiesRepository {
       });
     }
 
-    const [data, count] = await qb.orderBy('city.name', 'ASC')
+    const [data, count] = await qb
+      .orderBy('city.name', 'ASC')
       .skip((page - 1) * results)
       .take(results)
       .getManyAndCount();
@@ -44,17 +46,11 @@ export class CitiesRepository {
   }
 
   async findByStateId(stateId: number): Promise<City[]> {
-    return this.repository.createQueryBuilder('city')
-      .where('city.state_id = :stateId', { stateId })
-      .orderBy('city.name', 'ASC')
-      .getMany();
+    return this.repository.createQueryBuilder('city').where('city.state_id = :stateId', { stateId }).orderBy('city.name', 'ASC').getMany();
   }
 
   async findByCountryId(countryId: number): Promise<City[]> {
-    return this.repository.createQueryBuilder('city')
-      .where('city.country_id = :countryId', { countryId })
-      .orderBy('city.name', 'ASC')
-      .getMany();
+    return this.repository.createQueryBuilder('city').where('city.idCountry = :countryId', { countryId }).orderBy('city.name', 'ASC').getMany();
   }
 
   async save(city: DeepPartial<City>, queryRunner?: QueryRunner): Promise<City> {

@@ -25,9 +25,15 @@ import { PdfModule } from '@main-module/pdf/pdf.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateBudgetAction } from './actions/update-budget.action';
+import { City } from './locations/cities.entity';
+import { Country } from './locations/countries.entity';
+import { State } from './locations/states.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling, BudgetStatusTransition]), PdfModule],
+  imports: [
+    TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling, BudgetStatusTransition, City, State, Country]),
+    PdfModule,
+  ],
   controllers: [BudgetController, BudgetPdfController, BudgetStatusTransitionController],
   providers: [
     BudgetService,

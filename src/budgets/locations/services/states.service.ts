@@ -14,7 +14,7 @@ export class StatesService {
   async findOne(stateId: number) {
     const st = await this.statesRepo.findOne({
       where: { id: stateId },
-      select: { id: true, name: true, idCountry: true},
+      select: { id: true, name: true, idCountry: true },
     });
     if (!st) throw new NotFoundException('State not found');
     return st;
