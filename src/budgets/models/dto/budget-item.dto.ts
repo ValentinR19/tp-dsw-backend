@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsNumber, Min } from 'class-validator';
 
 export class BudgetItemDto {
@@ -10,6 +11,7 @@ export class BudgetItemDto {
 
   @IsNumber()
   @Min(0)
+  @Transform(({ value }) => parseFloat(value))
   unitPrice: number;
 
   @IsNumber()

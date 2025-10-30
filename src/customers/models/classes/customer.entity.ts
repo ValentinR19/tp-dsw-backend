@@ -1,7 +1,7 @@
 import { CustomerCategory } from '@customers-module/models/classes/customer-category.entity';
 import { CustomerStatus } from '@customers-module/models/classes/customer-status.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, VirtualColumn } from 'typeorm';
 import { CustomerShipping } from './customer-shipping.entity';
 @Entity('customer')
 export class Customer extends AuditEntity {
@@ -37,6 +37,11 @@ export class Customer extends AuditEntity {
 
   @Column({ default: true, type: 'boolean', name: 'active' })
   active: boolean;
+
+  @VirtualColumn({
+    query: (alias) => `CONCAT(${alias}.first_name, ' ', ${alias}.last_name)`,
+  })
+  fullName: string;
 
   @OneToOne(() => CustomerShipping, (customerShipping) => customerShipping.customer, { cascade: true })
   customerShipping: CustomerShipping;
