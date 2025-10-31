@@ -9,6 +9,7 @@ import { LoggedUser } from '@shared-module/decorators/logged-user.decorator';
 import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
+import { BudgetFormMapper } from './mappers/budget-form.mapper';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
@@ -30,8 +31,9 @@ export class BudgetController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Budget> {
-    return this.budgetService.findById(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<BudgetFormMapper> {
+    const budget = await this.budgetService.findById(id);
+    return BudgetFormMapper.toForm(budget);
   }
 
   @Post()

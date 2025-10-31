@@ -45,7 +45,17 @@ export class BudgetRepository {
 
   async findById(id: number, queryRunner?: QueryRunner): Promise<Budget> {
     const repository = queryRunner ? queryRunner.manager.getRepository(Budget) : this.repository;
-    return repository.findOneOrFail({ where: { id: id } });
+    return repository.findOneOrFail({
+      where: { id: id },
+      relations: {
+        items: { product: true },
+        budgetShipping: true,
+        budgetBilling: true,
+        customer: true,
+        status: true,
+        seller: true,
+      },
+    });
   }
 
   async findOneByRelations(id: number): Promise<Budget> {

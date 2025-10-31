@@ -6,7 +6,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('login') // endpoint: /api/auth/login
+  @Post('login')
   async login(@Body() dto: LoginUserDTO) {
     return this.authService.login(dto);
   }
