@@ -1,5 +1,6 @@
 import { BudgetStatusTransition } from '@budgets-module/models/classes/budget-status-transition.entity';
 import { Budget } from '@budgets-module/models/classes/budget.entity';
+import { BudgetStatusHistoryService } from '@budgets-module/services/budget-status-history.service';
 import { BudgetStatusTransitionService } from '@budgets-module/services/budget-status-transition.service';
 import { BudgetService } from '@budgets-module/services/budgets.service';
 import { generateSaleNumber } from '@budgets-module/utils/generate-sale-code.function';
@@ -13,10 +14,11 @@ export class BudgetChangeStatusService {
   constructor(
     private readonly budgetService: BudgetService,
     private readonly budgetStatusTransitionService: BudgetStatusTransitionService,
+    private readonly budgetStatusHistoryService: BudgetStatusHistoryService,
     private readonly datasource: DataSource,
   ) {}
 
-  async changeStatus(id: number, transitionName: string): Promise<Budget> {
+  async changeStatus(id: number, transitionName: string, user: IUserPayload): Promise<Budget> {
     const queryRunner = this.datasource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -32,12 +34,7 @@ export class BudgetChangeStatusService {
       };
 
       const updatedBudget = await this.budgetService.update(id, updatePayload, queryRunner);
-
-      if (transitionName === 'Confirmar') {
-      }
-
-      if (transitionName === 'Finalizar') {
-      }
+      await this.budgetStatusHistoryService.save({ budgetId: id, statusId: updatedBudget.statusId, userId: user.id }, queryRunner);
 
       await queryRunner.commitTransaction();
       return updatedBudget;
@@ -61,7 +58,8 @@ export class BudgetChangeStatusService {
     try {
       await this.budgetService.findById(id, queryRunner);
 
-      const updatedBudget = await this.budgetService.update(id, { statusId: 3 }, queryRunner);
+      const updatedBudget = await this.budgetService.update(id, { statusId: 4 }, queryRunner);
+      await this.budgetStatusHistoryService.save({ budgetId: id, statusId: updatedBudget.statusId, userId: user.id }, queryRunner);
 
       await queryRunner.commitTransaction();
       return updatedBudget;
