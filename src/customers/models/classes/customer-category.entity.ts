@@ -1,6 +1,6 @@
 import { Customer } from '@customers-module/models/classes/customer.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('customer_category')
 export class CustomerCategory extends AuditEntity {
@@ -13,6 +13,6 @@ export class CustomerCategory extends AuditEntity {
   @Column({ type: 'boolean', name: 'active' })
   active: string;
 
-  @OneToOne(() => Customer, (customer) => customer.customerCategory)
-  customer: Customer;
+  @OneToMany(() => Customer, (customer) => customer.customerCategory)
+  customer: Customer[];
 }

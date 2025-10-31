@@ -1,7 +1,7 @@
 import { CustomerCategory } from '@customers-module/models/classes/customer-category.entity';
 import { CustomerStatus } from '@customers-module/models/classes/customer-status.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, VirtualColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, VirtualColumn } from 'typeorm';
 import { CustomerShipping } from './customer-shipping.entity';
 @Entity('customer')
 export class Customer extends AuditEntity {
@@ -46,11 +46,11 @@ export class Customer extends AuditEntity {
   @OneToOne(() => CustomerShipping, (customerShipping) => customerShipping.customer, { cascade: true })
   customerShipping: CustomerShipping;
 
-  @OneToOne(() => CustomerCategory, (customerCategory) => customerCategory.customer)
+  @ManyToOne(() => CustomerCategory, (customerCategory) => customerCategory.customer)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
   customerCategory: CustomerCategory;
 
-  @OneToOne(() => CustomerStatus, (customerStatus) => customerStatus.customer)
+  @ManyToOne(() => CustomerStatus, (customerStatus) => customerStatus.customer)
   @JoinColumn({ name: 'status_id', referencedColumnName: 'id' })
   status: CustomerStatus;
 }
