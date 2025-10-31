@@ -14,7 +14,7 @@ export class StateRepository {
   async search(page: number, resultSize: number, global?: string, filters?: Partial<State>): Promise<IPaginated<State>> {
     const query = this.repository.createQueryBuilder('state');
     query.select(['state.id', 'state.name', 'state.country_code']);
-    filters?.idCountry && query.where('state.idCountry = :idCountry', { idCountry: filters.idCountry });
+    filters?.countryId && query.where('state.idCountry = :idCountry', { idCountry: filters.countryId });
     if (global) {
       query.andWhere(`(state.name LIKE :global OR state.country_code LIKE :global)`, { global: `%${global}%` });
     } else {
