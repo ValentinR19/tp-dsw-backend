@@ -1,0 +1,105 @@
+# 🌍 Carga de datos de ubicaciones (`world.sql`)
+
+Este procedimiento documenta cómo importar el archivo `world.sql` que contiene los datos de **países**, **estados** y **ciudades** en la base de datos.  
+El archivo proviene del dataset [`dr5hn/countries-states-cities-database`](https://github.com/dr5hn/countries-states-cities-database).
+
+---
+
+## ⚙️ Contexto
+
+En el proyecto, las tablas `countries`, `states` y `cities` están relacionadas con entidades como:
+
+- `budget_shipping`
+- `budget_billing`
+
+Estas entidades contienen claves foráneas (`country_id`, `state_id`, `city_id`) hacia las tablas de ubicación.  
+Para evitar errores de compatibilidad al ejecutar el dump (`world.sql`), se eliminan las claves foráneas temporalmente antes de importar los datos.
+
+---
+
+## 🚀 Procedimiento aplicado
+
+### 1. Eliminar claves foráneas existentes
+
+Antes de importar el archivo, se eliminaron las constraints que referencian a `countries`, `states` y `cities`.
+
+```sql
+ALTER TABLE budget_shipping DROP FOREIGN KEY FK_budget_shipping_country;
+ALTER TABLE budget_shipping DROP FOREIGN KEY FK_budget_shipping_state;
+ALTER TABLE budget_shipping DROP FOREIGN KEY FK_budget_shipping_city;
+
+ALTER TABLE budget_billing DROP FOREIGN KEY FK_budget_billing_country;
+ALTER TABLE budget_billing DROP FOREIGN KEY FK_budget_billing_state;
+ALTER TABLE budget_billing DROP FOREIGN KEY FK_budget_billing_city;
+```
+
+> 💡 Los nombres de las claves foráneas pueden variar según la versión o la migración generada por TypeORM.  
+> En caso de no conocerlos, se pueden listar con:
+>
+> ```sql
+> SELECT CONSTRAINT_NAME, TABLE_NAME
+> FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+> WHERE REFERENCED_TABLE_NAME IN ('countries', 'states', 'cities');
+> ```
+
+---
+
+### 2. Ejecutar el dump de ubicaciones
+
+Una vez removidas las FKs, se ejecutó el dump original:
+
+```bash
+mysql -u root -p dsw_db < world.sql
+```
+
+Esto crea y carga las tablas:
+
+- `countries`
+- `states`
+- `cities`
+- (y también `regions` y `subregions`, si están incluidas en el archivo)
+
+---
+
+### 3. (Opcional) Restaurar las claves foráneas
+
+Después de importar correctamente los datos, se pueden volver a crear las relaciones:
+
+```sql
+ALTER TABLE budget_shipping
+  ADD CONSTRAINT FK_budget_shipping_country FOREIGN KEY (country_id) REFERENCES countries(id),
+  ADD CONSTRAINT FK_budget_shipping_state FOREIGN KEY (state_id) REFERENCES states(id),
+  ADD CONSTRAINT FK_budget_shipping_city FOREIGN KEY (city_id) REFERENCES cities(id);
+
+ALTER TABLE budget_billing
+  ADD CONSTRAINT FK_budget_billing_country FOREIGN KEY (country_id) REFERENCES countries(id),
+  ADD CONSTRAINT FK_budget_billing_state FOREIGN KEY (state_id) REFERENCES states(id),
+  ADD CONSTRAINT FK_budget_billing_city FOREIGN KEY (city_id) REFERENCES cities(id);
+```
+
+---
+
+## ✅ Resultado final
+
+Después de ejecutar el procedimiento:
+
+- El dump `world.sql` se importó sin errores.
+- Las tablas `countries`, `states` y `cities` quedaron pobladas correctamente.
+- Las claves foráneas se pueden restaurar de forma segura, manteniendo compatibilidad con las entidades TypeORM.
+
+---
+
+## 🧠 Notas adicionales
+
+- Es recomendable **mantener todas las columnas relacionadas como `UNSIGNED`** (por ejemplo `city_id INT UNSIGNED`) para evitar conflictos en futuras migraciones.
+- Si solo necesitás países específicos (por ejemplo Mercosur + EE. UU.), podés filtrar luego del import:
+  ```sql
+  DELETE FROM countries WHERE iso2 NOT IN ('AR', 'BR', 'PY', 'UY', 'US');
+  DELETE FROM states WHERE country_id NOT IN (SELECT id FROM countries);
+  DELETE FROM cities WHERE country_id NOT IN (SELECT id FROM countries);
+  ```
+
+---
+
+✍️ **Autor:** Ignacio Rodríguez - Kiwi  
+📅 **Última actualización:** Octubre 2025

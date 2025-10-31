@@ -3,6 +3,7 @@ import appConfig from '@config-module/app.config';
 import databaseConfig from '@config-module/database.config';
 import { validationSchema } from '@config-module/validation.schema';
 import { CustomerModule } from '@customers-module/customers.module';
+import { LocationModule } from '@main-module/locations/location.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
@@ -56,6 +57,7 @@ import { UsersModule } from './users/users.module';
     BudgetModule,
     CustomerModule,
     ProductModule,
+    LocationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

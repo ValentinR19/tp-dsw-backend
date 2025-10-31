@@ -1,5 +1,8 @@
 import { Budget } from '@budgets-module/models/classes/budget.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { City } from '@main-module/locations/models/classes/city.entity';
+import { Country } from '@main-module/locations/models/classes/country.entity';
+import { State } from '@main-module/locations/models/classes/state.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('budget_billing')
 export class BudgetBilling {
@@ -12,6 +15,14 @@ export class BudgetBilling {
   @Column({ type: 'varchar', length: 20, name: 'buyer_company' })
   buyerCompany: string;
 
+  @Column({ type: 'mediumint', unsigned: true, name: 'city_id', nullable: true })
+  cityId: number;
+
+  @Column({ type: 'mediumint', unsigned: true, name: 'state_id', nullable: true })
+  stateId: number;
+
+  @Column({ type: 'mediumint', unsigned: true, name: 'country_id', nullable: true })
+  countryId: number;
   @Column({ type: 'varchar', length: 20, name: 'buyer_address' })
   buyerAddress: string;
 
@@ -33,4 +44,16 @@ export class BudgetBilling {
   @OneToOne(() => Budget, (budget) => budget.budgetBilling, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'budget_id', referencedColumnName: 'id' })
   budget: Budget;
+
+  @ManyToOne(() => City)
+  @JoinColumn({ name: 'city_id', referencedColumnName: 'id', foreignKeyConstraintName: 'FK_budget_billing_city' })
+  city: City;
+
+  @ManyToOne(() => State)
+  @JoinColumn({ name: 'state_id', referencedColumnName: 'id', foreignKeyConstraintName: 'FK_budget_billing_state' })
+  state: State;
+
+  @ManyToOne(() => Country)
+  @JoinColumn({ name: 'country_id', referencedColumnName: 'id', foreignKeyConstraintName: 'FK_budget_billing_country' })
+  country: Country;
 }
