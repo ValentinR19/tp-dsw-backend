@@ -28,5 +28,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     CustomerShippingService,
     CustomerShippingRepository,
   ],
+  exports: [CustomerService],
 })
 export class CustomerModule {}

@@ -5,6 +5,7 @@ import { BudgetBillingService } from '@budgets-module/services/budget-billing.se
 import { BudgetItemService } from '@budgets-module/services/budget-item.service';
 import { BudgetShippingService } from '@budgets-module/services/budget-shipping.service';
 import { BudgetService } from '@budgets-module/services/budgets.service';
+import { CustomerService } from '@customers-module/services/customers.service';
 import { IUserPayload } from '@main-module/auth/models/interfaces/payload.interface';
 import { Injectable, Logger } from '@nestjs/common';
 import { IUseCase } from '@shared-module/interfaces/use-case.interface';
@@ -19,6 +20,7 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
     private readonly budgetItemService: BudgetItemService,
     private readonly budgetShippingService: BudgetShippingService,
     private readonly budgetBillingService: BudgetBillingService,
+    private readonly customerService: CustomerService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -52,6 +54,8 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
         }
         await this.budgetItemService.save(itemsPayload, queryRunner);
       }
+
+      await this.customerService.update(dto.customerId, { statusId: 2 }, queryRunner);
 
       dto.budgetShipping && (await this.budgetShippingService.create({ ...dto.budgetShipping, budgetId: budget.id }, queryRunner));
 

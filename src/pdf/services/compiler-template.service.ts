@@ -12,18 +12,24 @@ export class TemplateCompilerService {
   }
 
   private registerHelpers() {
+    // Comparación básica
     Handlebars.registerHelper('ifEq', function (arg1, arg2, options) {
       return arg1 === arg2 ? options.fn(this) : options.inverse(this);
     });
 
-    Handlebars.registerHelper('formatCurrency', function (value: number) {
+    // Formato de moneda seguro
+    Handlebars.registerHelper('formatCurrency', function (value: any) {
+      const num = parseFloat(value);
+      if (isNaN(num)) return '$0,00';
       return new Intl.NumberFormat('es-AR', {
         style: 'currency',
         currency: 'ARS',
-      }).format(value);
+      }).format(num);
     });
 
+    // Formato de fecha
     Handlebars.registerHelper('formatDate', function (date: string | Date) {
+      if (!date) return '';
       const d = new Date(date);
       return d.toLocaleDateString('es-AR', {
         day: '2-digit',
@@ -32,11 +38,11 @@ export class TemplateCompilerService {
       });
     });
 
-    Handlebars.registerHelper('toCurrency', function (value: number, currency: string) {
-      return new Intl.NumberFormat('es-AR', {
-        style: 'currency',
-        currency: currency || 'ARS',
-      }).format(value);
+    // Incremental para enumerar filas (#)
+    Handlebars.registerHelper('inc', function (value) {
+      const n = parseInt(value);
+      if (isNaN(n)) return '—';
+      return n + 1;
     });
   }
 

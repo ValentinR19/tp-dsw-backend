@@ -1,41 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { JSDOM } from 'jsdom';
-import * as path from 'path';
-import * as PdfPrinter from 'pdfmake';
-
-const htmlToPdfmake = require('html-to-pdfmake');
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import puppeteer from 'puppeteer';
 
 @Injectable()
 export class PdfService {
-  async generatePdfFromHtml(html: string, options?: { format?: string }): Promise<Buffer> {
-    const dom = new JSDOM(`<!DOCTYPE html><html><body>${html}</body></html>`);
-    const pdfContent = htmlToPdfmake(html, { window: dom.window });
+  constructor() {
+    (pdfMake as any).vfs = pdfFonts;
+  }
 
-    const fonts = {
-      Roboto: {
-        normal: path.join(process.cwd(), 'fonts/roboto/static/Roboto-Regular.ttf'),
-        bold: path.join(process.cwd(), 'fonts/roboto/static/Roboto-Bold.ttf'),
-        italics: path.join(process.cwd(), 'fonts/roboto/static/Roboto-Italic.ttf'),
-        bolditalics: path.join(process.cwd(), 'fonts/roboto/static/Roboto-BoldItalic.ttf'),
-      },
-    };
-    const printer = new PdfPrinter(fonts);
+  async generatePdfFromHtml(html: string, metadata?: any): Promise<Buffer> {
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle0' });
 
-    const docDefinition = {
-      content: pdfContent,
-      defaultStyle: { font: 'Roboto', fontSize: 10 },
-      pageSize: options?.format || 'A4',
-      pageMargins: [40, 60, 40, 60],
+    const pdfOptions: any = {
+      printBackground: true,
+      margin: metadata?.margin ?? { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
     };
 
-    const pdfDoc = printer.createPdfKitDocument(docDefinition);
-    const chunks: Buffer[] = [];
+    if (metadata?.format) {
+      pdfOptions.format = metadata.format;
+    } else if (metadata?.width && metadata?.height) {
+      pdfOptions.width = metadata.width;
+      pdfOptions.height = metadata.height;
+    }
 
-    return new Promise((resolve, reject) => {
-      pdfDoc.on('data', (chunk) => chunks.push(chunk));
-      pdfDoc.on('end', () => resolve(Buffer.concat(chunks)));
-      pdfDoc.on('error', reject);
-      pdfDoc.end();
+    const pdfBuffer = await page.pdf(pdfOptions);
+    await browser.close();
+    return Buffer.from(pdfBuffer);
+  }
+
+  async generatePdfFromDefinition(documentDefinition: any): Promise<Buffer> {
+    return new Promise<Buffer>((resolve, reject) => {
+      const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
+      pdfDocGenerator.getBuffer((buffer: Buffer) => {
+        if (buffer) {
+          resolve(buffer);
+        } else {
+          reject(new Error('Error generando PDF con pdfMake'));
+        }
+      });
     });
   }
 }

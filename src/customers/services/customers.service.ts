@@ -6,7 +6,7 @@ import { NotFoundErrorException } from '@shared-module/exceptions/not-found.exce
 import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exception';
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
-import { DeepPartial } from 'typeorm';
+import { DeepPartial, QueryRunner } from 'typeorm';
 
 @Injectable()
 export class CustomerService {
@@ -45,10 +45,10 @@ export class CustomerService {
     return this.save(dto);
   }
 
-  async update(id: number, updateCustomerDto: DeepPartial<CreateCustomerDto>): Promise<Customer> {
+  async update(id: number, updateCustomerDto: DeepPartial<CreateCustomerDto>, queryRunner?: QueryRunner): Promise<Customer> {
     this.logger.log(`Updating customer: ${JSON.stringify(updateCustomerDto)}`);
     await this.findById(id);
-    return this.save({ ...updateCustomerDto, id });
+    return this.save({ ...updateCustomerDto, id }, queryRunner);
   }
 
   async softDelete(id: number): Promise<void> {
@@ -60,10 +60,10 @@ export class CustomerService {
     }
   }
 
-  private async save(customer: DeepPartial<Customer>): Promise<Customer> {
+  private async save(customer: DeepPartial<Customer>, queryRunner?: QueryRunner): Promise<Customer> {
     try {
       this.logger.log(`Saving customer: ${JSON.stringify(customer)}`);
-      const savedCustomer = await this.customerRepository.save(customer);
+      const savedCustomer = await this.customerRepository.save(customer, queryRunner);
       this.logger.log(`Customer saved: ${JSON.stringify(savedCustomer)}`);
       return savedCustomer;
     } catch (error) {

@@ -2,14 +2,17 @@ import { Customer } from '@customers-module/models/classes/customer.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
-import { DeepPartial, EntityManager, Repository } from 'typeorm';
+import { DeepPartial, EntityManager, QueryRunner, Repository } from 'typeorm';
 
 @Injectable()
 export class CustomerRepository {
   constructor(@InjectRepository(Customer) private readonly repository: Repository<Customer>) {}
 
   async search(page: number, results: number, filters?: Partial<Customer>, global?: string): Promise<IPaginated<Customer>> {
-    const queryBuilder = this.repository.createQueryBuilder('customer');
+    const queryBuilder = this.repository
+      .createQueryBuilder('customer')
+      .leftJoinAndSelect('customer.customerCategory', 'customerCategory')
+      .leftJoinAndSelect('customer.status', 'status');
 
     if (global) {
       queryBuilder.andWhere(`(customer.firstName LIKE :global OR customer.lastName LIKE :global OR customer.document LIKE :global OR customer.internalCode LIKE :global)`, {
@@ -39,8 +42,8 @@ export class CustomerRepository {
     return this.repository.find();
   }
 
-  async save(customer: DeepPartial<Customer>, manager?: EntityManager): Promise<Customer> {
-    const repository = manager ? manager.getRepository(Customer) : this.repository;
+  async save(customer: DeepPartial<Customer>, queryRunner?: QueryRunner): Promise<Customer> {
+    const repository = queryRunner ? queryRunner.manager.getRepository(Customer) : this.repository;
     return repository.save(customer);
   }
 

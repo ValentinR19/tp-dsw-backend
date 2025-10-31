@@ -4,6 +4,7 @@ import { BudgetStatusHistoryService } from '@budgets-module/services/budget-stat
 import { BudgetStatusTransitionService } from '@budgets-module/services/budget-status-transition.service';
 import { BudgetService } from '@budgets-module/services/budgets.service';
 import { generateSaleNumber } from '@budgets-module/utils/generate-sale-code.function';
+import { CustomerService } from '@customers-module/services/customers.service';
 import { IUserPayload } from '@main-module/auth/models/interfaces/payload.interface';
 import { Injectable } from '@nestjs/common';
 import { FindOptions } from '@shared-module/types/find-options.type';
@@ -14,6 +15,7 @@ export class BudgetChangeStatusService {
   constructor(
     private readonly budgetService: BudgetService,
     private readonly budgetStatusTransitionService: BudgetStatusTransitionService,
+    private readonly customerService: CustomerService,
     private readonly budgetStatusHistoryService: BudgetStatusHistoryService,
     private readonly datasource: DataSource,
   ) {}
@@ -32,6 +34,10 @@ export class BudgetChangeStatusService {
         statusId: statusTransition.toStatusId,
         ...(transitionName === 'Confirmar' ? { saleNumber: generateSaleNumber(budget.id, budget.sellerId) } : {}),
       };
+
+      if (transitionName === 'Confirmar') {
+        await this.customerService.update(budget.customerId, { statusId: 3 }, queryRunner);
+      }
 
       const updatedBudget = await this.budgetService.update(id, updatePayload, queryRunner);
       await this.budgetStatusHistoryService.save({ budgetId: id, statusId: updatedBudget.statusId, userId: user.id }, queryRunner);

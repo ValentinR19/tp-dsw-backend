@@ -1,1 +1,291 @@
-<h1>HOLA</h1>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Presupuesto {{budget.code}}</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Roboto', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        background: #fff;
+        -webkit-print-color-adjust: exact !important;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 900px;
+        margin: 40px auto;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 30px 40px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      /* ---------- ENCABEZADO ---------- */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2px solid #f9a21b;
+        padding-bottom: 15px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+      }
+
+      .logo {
+        width: 55px;
+        height: 55px;
+        background-color: #f9a21b;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .brand-info {
+        margin-left: 10px;
+      }
+
+      .brand-info h1 {
+        margin: 0;
+        font-size: 22px;
+        color: #222;
+      }
+
+      .brand-info small {
+        color: #888;
+      }
+
+      .info {
+        text-align: right;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 4px;
+        color: #fff;
+        font-weight: bold;
+        font-size: 11px;
+      }
+
+      /* ---------- SECCIONES ---------- */
+      h3 {
+        color: #f9a21b;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
+        margin-top: 30px;
+        padding-bottom: 5px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      td,
+      th {
+        padding: 8px;
+        vertical-align: top;
+      }
+
+      th {
+        background-color: #fafafa;
+        border-bottom: 1px solid #eee;
+        font-size: 12px;
+        text-align: left;
+      }
+
+      td {
+        border-bottom: 1px solid #f4f4f4;
+        font-size: 12px;
+      }
+
+      .right {
+        text-align: right;
+      }
+
+      .totals {
+        margin-top: 20px;
+        border-top: 2px solid #f9a21b;
+      }
+
+      .totals td {
+        border: none;
+        padding: 6px 4px;
+      }
+
+      .totals .label {
+        text-align: right;
+        font-weight: bold;
+      }
+
+      .totals .value {
+        text-align: right;
+      }
+
+      .total-row {
+        font-size: 14px;
+        font-weight: bold;
+        border-top: 2px solid #f9a21b;
+      }
+
+      /* ---------- FOOTER ---------- */
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 11px;
+        color: #777;
+        line-height: 1.4;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+        }
+
+        .container {
+          box-shadow: none;
+          border: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- ENCABEZADO -->
+      <div class="header">
+        <div class="brand">
+          <div class="logo">W</div>
+          <div class="brand-info">
+            <h1>WavePass</h1>
+            <small>Presupuesto</small>
+          </div>
+        </div>
+        <div class="info">
+          <div><b>Fecha:</b> {{formatDate budget.createdAt}}</div>
+          <div><b>Código:</b> {{budget.code}}</div>
+          <div>
+            <b>Estado:</b>
+            <span
+              class="status"
+              style="background-color: {{#if budget.status.color}}{{budget.status.color}}{{else}}#999{{/if}};"
+            >
+              {{budget.status.name}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTE -->
+      <h3>Datos del Cliente</h3>
+      <table>
+        <tr>
+          <td><b>Nombre:</b> {{budget.customer.fullName}}</td>
+          <td><b>Empresa:</b> {{budget.customer.companyName}}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Documento:</b>
+            {{#if budget.customer.document}}{{budget.customer.typeOfDocument}}
+            {{budget.customer.document}}{{else}}—{{/if}}
+          </td>
+          <td><b>Email:</b> {{#if budget.budgetShipping.email}}{{budget.budgetShipping.email}}{{else}}—{{/if}}</td>
+        </tr>
+      </table>
+
+      <!-- FACTURACIÓN Y ENVÍO -->
+      <h3>Facturación y Envío</h3>
+      <table>
+        <tr>
+          <td><b>Dirección Facturación:</b> {{#if budget.budgetBilling.buyerAddress}}{{budget.budgetBilling.buyerAddress}}{{else}}—{{/if}}</td>
+          <td><b>Dirección Envío:</b> {{#if budget.budgetShipping.address}}{{budget.budgetShipping.address}}{{else}}—{{/if}}</td>
+        </tr>
+        <tr>
+          <td><b>País:</b> {{#if budget.budgetBilling.shippingCountry}}{{budget.budgetBilling.shippingCountry}}{{else}}—{{/if}}</td>
+          <td><b>Condición de Pago:</b> {{#if budget.budgetBilling.paymentDescription}}{{budget.budgetBilling.paymentDescription}}{{else}}—{{/if}}</td>
+        </tr>
+      </table>
+
+      <!-- DETALLE DE PRODUCTOS -->
+      <h3>Detalle de Productos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Descripción</th>
+            <th class="right">Cantidad</th>
+            <th class="right">Precio Unit.</th>
+            <th class="right">Desc.</th>
+            <th class="right">IVA</th>
+            <th class="right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each budget.items}}
+          <tr>
+            <td>{{inc @index}}</td>
+            <td>{{this.product.name}}</td>
+            <td class="right">{{this.quantity}}</td>
+            <td class="right">{{formatCurrency this.unitPrice}}</td>
+            <td class="right">{{formatCurrency this.discount}}</td>
+            <td class="right">{{formatCurrency this.tax}}</td>
+            <td class="right">{{formatCurrency this.totalLine}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <!-- TOTALES -->
+      <table class="totals">
+        <tr>
+          <td class="label">Subtotal:</td>
+          <td class="value">{{formatCurrency budget.subtotal}}</td>
+        </tr>
+        <tr>
+          <td class="label">Descuento:</td>
+          <td class="value">{{formatCurrency budget.totalDiscount}}</td>
+        </tr>
+        <tr>
+          <td class="label">IVA:</td>
+          <td class="value">{{formatCurrency budget.totalTax}}</td>
+        </tr>
+        <tr class="total-row">
+          <td class="label">TOTAL:</td>
+          <td class="value">{{formatCurrency budget.total}}</td>
+        </tr>
+      </table>
+
+      <!-- VENDEDOR -->
+      <h3>Vendedor</h3>
+      <table>
+        <tr>
+          <td><b>Nombre:</b> {{budget.seller.fullName}}</td>
+          <td><b>Email:</b> {{budget.seller.email}}</td>
+        </tr>
+      </table>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        Comprobante generado automáticamente el {{formatDate budget.updatedAt}}.<br />
+        Gracias por confiar en nosotros.
+      </div>
+    </div>
+  </body>
+</html>

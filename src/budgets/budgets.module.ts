@@ -24,13 +24,14 @@ import { BudgetShippingService } from '@budgets-module/services/budget-shipping.
 import { BudgetStatusHistoryService } from '@budgets-module/services/budget-status-history.service';
 import { BudgetStatusTransitionService } from '@budgets-module/services/budget-status-transition.service';
 import { BudgetService } from '@budgets-module/services/budgets.service';
+import { CustomerModule } from '@customers-module/customers.module';
 import { PdfModule } from '@main-module/pdf/pdf.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UpdateBudgetAction } from './actions/update-budget.action';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling, BudgetStatusTransition]), PdfModule],
+  imports: [TypeOrmModule.forFeature([Budget, BudgetItem, BudgetStatus, BudgetStatusHistory, BudgetShipping, BudgetBilling, BudgetStatusTransition]), PdfModule, CustomerModule],
   controllers: [BudgetController, BudgetPdfController, BudgetStatusTransitionController, ChangeStatusBudgetController],
   providers: [
     BudgetService,
