@@ -10,12 +10,12 @@ export class StateService {
 
   constructor(private readonly stateRepository: StateRepository) {}
 
-  async search(page: number, dto: PaginatedQueryDTO<State>): Promise<IPaginated<State>> {
+  async search(page: number, countryId: number, dto: PaginatedQueryDTO<State>): Promise<IPaginated<State>> {
     let { results, global, filters } = dto;
     if (typeof filters === 'string') {
       filters = JSON.parse(filters);
     }
     this.logger.log(`Searching states with filters: ${JSON.stringify(filters)}`);
-    return this.stateRepository.search(page, results, global, filters);
+    return this.stateRepository.search(page, results, countryId, global, filters);
   }
 }

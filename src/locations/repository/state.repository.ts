@@ -11,10 +11,10 @@ export class StateRepository {
     private readonly repository: Repository<State>,
   ) {}
 
-  async search(page: number, resultSize: number, global?: string, filters?: Partial<State>): Promise<IPaginated<State>> {
+  async search(page: number, resultSize: number, countryId: number, global?: string, filters?: Partial<State>): Promise<IPaginated<State>> {
     const query = this.repository.createQueryBuilder('state');
     query.select(['state.id', 'state.name', 'state.country_code']);
-    filters?.countryId && query.where('state.idCountry = :idCountry', { idCountry: filters.countryId });
+    query.where('state.countryId = :idCountry', { idCountry: countryId });
     if (global) {
       query.andWhere(`(state.name LIKE :global OR state.country_code LIKE :global)`, { global: `%${global}%` });
     } else {

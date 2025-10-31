@@ -1,6 +1,6 @@
 import { City } from '@main-module/locations/models/classes/city.entity';
 import { Country } from '@main-module/locations/models/classes/country.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('states', { synchronize: false })
 export class State {
@@ -38,6 +38,7 @@ export class State {
   longitude?: number;
 
   @ManyToOne(() => Country, (country) => country.states, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+  @JoinColumn([{ name: 'country_id', referencedColumnName: 'id' }])
   country: Country;
 
   @Column({ name: 'created_at', precision: 0, type: 'timestamp', nullable: true })

@@ -1,7 +1,9 @@
 import { CustomerCategory } from '@customers-module/models/classes/customer-category.entity';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
 import { CustomerCategoryService } from '../services/customer-category.service';
 @Controller('categories')
+@UseGuards(JwtAuthGuard)
 export class CustomerCategoryController {
   constructor(private readonly service: CustomerCategoryService) {}
 

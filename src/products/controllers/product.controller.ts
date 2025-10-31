@@ -1,12 +1,14 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Product } from '@product-module/models/classes/product.entity';
 import { CreateProductDto } from '@product-module/models/dtos/create-product.dto';
 import { UpdateProductDto } from '@product-module/models/dtos/update-product.dto';
 import { ProductService } from '@product-module/services/product.service';
+import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
 @Controller()
+@UseGuards(JwtAuthGuard)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 

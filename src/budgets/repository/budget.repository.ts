@@ -50,7 +50,11 @@ export class BudgetRepository {
       where: { id: id },
       relations: {
         items: { product: true },
-        budgetShipping: true,
+        budgetShipping: {
+          city: true,
+          state: true,
+          country: true,
+        },
         budgetBilling: true,
         customer: true,
         status: true,

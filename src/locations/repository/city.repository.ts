@@ -8,10 +8,9 @@ import { Repository } from 'typeorm';
 export class CityRepository {
   constructor(@InjectRepository(City) private readonly repository: Repository<City>) {}
 
-  async search(page: number, resultSize: number, global: string, filters?: Partial<City>): Promise<IPaginated<City>> {
+  async search(page: number, resultSize: number, stateId: number, global: string, filters?: Partial<City>): Promise<IPaginated<City>> {
     const query = this.repository.createQueryBuilder('city');
-
-    filters?.stateId && query.andWhere('city.stateId = :stateId', { stateId: filters.stateId });
+    query.where('city.stateId = :stateId', { stateId: stateId });
     filters?.countryId && query.andWhere('city.countryId = :countryId', { countryId: filters.countryId });
 
     if (global) {

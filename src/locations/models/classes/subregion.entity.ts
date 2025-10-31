@@ -1,6 +1,6 @@
 import { Country } from '@main-module/locations/models/classes/country.entity';
 import { Region } from '@main-module/locations/models/classes/region.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('subregions', { synchronize: false })
 export class Subregion {
@@ -17,6 +17,7 @@ export class Subregion {
   regionId: number;
 
   @ManyToOne(() => Region, (region) => region.subregions, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+  @JoinColumn([{ name: 'region_id', referencedColumnName: 'id' }])
   region: Region;
 
   @Column({ name: 'created_at', precision: 0, type: 'timestamp', nullable: true })

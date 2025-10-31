@@ -40,9 +40,9 @@ export class BudgetFormMapper {
       budgetShipping: budget.budgetShipping
         ? {
             address: budget.budgetShipping.address,
-            cityId: budget.budgetShipping.city?.id,
-            stateId: budget.budgetShipping.state?.id,
-            countryId: budget.budgetShipping.country?.id,
+            cityId: budget.budgetShipping.city,
+            stateId: budget.budgetShipping.state,
+            countryId: budget.budgetShipping.country,
           }
         : undefined,
 
@@ -52,7 +52,7 @@ export class BudgetFormMapper {
             buyerAddress: budget.budgetBilling.buyerAddress,
             buyerTaxId: budget.budgetBilling.buyerTaxId,
             shippingCountry: budget.budgetBilling.shippingCountry,
-            consigneeAddress: budget.budgetBilling.consigneeAddress,
+            consigneeAdress: budget.budgetBilling.consigneeAddress,
             portDestination: budget.budgetBilling.portDestination,
             paymentDescription: budget.budgetBilling.paymentDescription,
           }

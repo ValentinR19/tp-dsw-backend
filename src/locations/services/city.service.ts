@@ -10,12 +10,12 @@ export class CityService {
 
   constructor(private readonly cityRepository: CityRepository) {}
 
-  async search(page: number, dto: PaginatedQueryDTO<City>): Promise<IPaginated<City>> {
+  async search(page: number, stateId: number, dto: PaginatedQueryDTO<City>): Promise<IPaginated<City>> {
     let { results, global, filters } = dto;
     if (typeof filters === 'string') {
       filters = JSON.parse(filters);
     }
     this.logger.log(`Searching cities with filters: ${JSON.stringify(filters)}`);
-    return this.cityRepository.search(page, results, global, filters);
+    return this.cityRepository.search(page, results, stateId, global, filters);
   }
 }

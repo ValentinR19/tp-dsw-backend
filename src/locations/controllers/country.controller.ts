@@ -1,11 +1,13 @@
 import { Country } from '@main-module/locations/models/classes/country.entity';
 import { CountryService } from '@main-module/locations/services/country.service';
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '@shared-module/guards/jwt.guard';
 import { PageParamDTO } from '@shared-module/models/dtos/page-param.dto';
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 
 @Controller('countries')
+@UseGuards(JwtAuthGuard)
 export class CountryController {
   constructor(private readonly countryService: CountryService) {}
 

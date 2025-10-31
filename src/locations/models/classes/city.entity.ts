@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Country } from './country.entity';
 import { State } from './state.entity';
 
@@ -29,9 +29,11 @@ export class City {
   longitude: number;
 
   @ManyToOne(() => State, (state) => state.cities, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+  @JoinColumn([{ name: 'state_id', referencedColumnName: 'id' }])
   state: State;
 
   @ManyToOne(() => Country, (country) => country.cities, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+  @JoinColumn([{ name: 'country_id', referencedColumnName: 'id' }])
   country: Country;
 
   @Column({

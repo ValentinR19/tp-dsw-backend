@@ -2,7 +2,7 @@ import { City } from '@main-module/locations/models/classes/city.entity';
 import { Region } from '@main-module/locations/models/classes/region.entity';
 import { State } from '@main-module/locations/models/classes/state.entity';
 import { Subregion } from '@main-module/locations/models/classes/subregion.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('countries', { synchronize: false })
 export class Country {
@@ -55,9 +55,11 @@ export class Country {
   subregionId?: number;
 
   @ManyToOne(() => Region, (region) => region.countries, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+  @JoinColumn([{ name: 'region_id', referencedColumnName: 'id' }])
   regionRelation: Region;
 
   @ManyToOne(() => Subregion, (subregion) => subregion.countries, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+  @JoinColumn([{ name: 'subregion_id', referencedColumnName: 'id' }])
   subregionRelation: Subregion;
 
   @Column({ name: 'nationality', type: 'varchar', length: 255, nullable: true })
