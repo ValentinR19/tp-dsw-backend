@@ -29,10 +29,10 @@ export class Customer extends AuditEntity {
   @Column({ type: 'varchar', name: 'type_of_document' })
   typeOfDocument: string;
 
-  @Column({ type: 'decimal', name: 'document' })
+  @Column({ type: 'varchar', name: 'document' })
   document: string;
 
-  @Column({ type: 'decimal', name: 'internal_code' })
+  @Column({ type: 'varchar', name: 'internal_code' })
   internalCode: string;
 
   @Column({ default: true, type: 'boolean', name: 'active' })

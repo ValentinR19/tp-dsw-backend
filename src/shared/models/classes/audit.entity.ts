@@ -10,6 +10,7 @@ export abstract class AuditEntity {
     precision: 0,
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
+    name: 'updated_at',
     nullable: true,
   })
   updatedAt: Date;
