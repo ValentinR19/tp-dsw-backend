@@ -1,4 +1,3 @@
-// src/modules/product/services/product-price.service.ts
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { ProductPriceHistoryRepository } from '../repositories/product-price-history.repository';

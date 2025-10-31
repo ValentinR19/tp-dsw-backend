@@ -1,5 +1,8 @@
+import { City } from '@budgets-module/locations/cities.entity';
+import { Country } from '@budgets-module/locations/countries.entity';
+import { State } from '@budgets-module/locations/states.entity';
 import { Budget } from '@budgets-module/models/classes/budget.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('budget_shipping')
 export class BudgetShipping {
@@ -27,4 +30,16 @@ export class BudgetShipping {
   @OneToOne(() => Budget, (budget) => budget.budgetShipping)
   @JoinColumn({ name: 'budget_id', referencedColumnName: 'id' })
   budget: Budget;
+
+  @ManyToOne(() => City, { nullable: true })
+  @JoinColumn({ name: 'city_id', referencedColumnName: 'id' })
+  city: City;
+
+  @ManyToOne(() => State, { nullable: true })
+  @JoinColumn({ name: 'state_id', referencedColumnName: 'id' })
+  state: State;
+
+  @ManyToOne(() => Country, { nullable: true })
+  @JoinColumn({ name: 'country_id', referencedColumnName: 'id' })
+  country: Country;
 }

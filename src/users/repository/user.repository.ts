@@ -6,7 +6,6 @@ import { User } from '../models/classes/user.entity';
 
 @Injectable()
 export class UserRepository {
-  //Inyeccion de TypeORM Repository.
   constructor(@InjectRepository(User) private readonly repository: Repository<User>) {}
 
   async search(page: number, resultSize: number, global?: string, filters?: Partial<User>): Promise<IPaginated<User>> {
