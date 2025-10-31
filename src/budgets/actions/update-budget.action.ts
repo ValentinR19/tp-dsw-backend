@@ -25,6 +25,7 @@ export class UpdateBudgetAction {
     await queryRunner.startTransaction();
 
     try {
+      const { items, budgetShipping, budgetBilling, ...budget } = dto;
       this.logger.log(`Updating budget ID ${id} with data: ${JSON.stringify(dto)}`);
 
       await this.budgetService.findById(id, queryRunner);
@@ -32,43 +33,40 @@ export class UpdateBudgetAction {
       await this.budgetService.save(
         {
           id,
-          ...dto,
+          ...budget,
         },
         queryRunner,
       );
 
-      if (dto.items) {
+      if (items) {
         await this.budgetItemService.deleteByBudgetId(id, queryRunner);
-
-        const newItems = dto.items.map((item) => ({
+        const newItems = items.map((item) => ({
           ...item,
           budgetId: id,
         }));
         await this.budgetItemService.save(newItems, queryRunner);
       }
 
-      if (dto.budgetShipping) {
+      if (budgetShipping) {
         const existingShipping = await this.budgetShippingService.findByBudgetId(id, queryRunner);
         if (existingShipping) {
-          await this.budgetShippingService.save({ id: existingShipping.id, ...dto.budgetShipping }, queryRunner);
+          await this.budgetShippingService.save({ id: existingShipping.id, ...budgetShipping }, queryRunner);
         } else {
-          await this.budgetShippingService.create({ ...dto.budgetShipping, budgetId: id }, queryRunner);
+          await this.budgetShippingService.create({ ...budgetShipping, budgetId: id }, queryRunner);
         }
       }
 
-      // 🧾 4. Actualizar facturación
-      if (dto.budgetBilling) {
+      if (budgetBilling) {
         const existingBilling = await this.budgetBillingService.findByBudgetId(id, queryRunner);
         if (existingBilling) {
-          await this.budgetBillingService.save({ id: existingBilling.id, ...dto.budgetBilling }, queryRunner);
+          await this.budgetBillingService.save({ id: existingBilling.id, ...budgetBilling }, queryRunner);
         } else {
-          await this.budgetBillingService.create({ ...dto.budgetBilling, budgetId: id }, queryRunner);
+          await this.budgetBillingService.create({ ...budgetBilling, budgetId: id }, queryRunner);
         }
       }
 
       await queryRunner.commitTransaction();
 
-      // 🔄 Devuelve con relaciones actualizadas
       return this.budgetService.findById(id);
     } catch (error) {
       await queryRunner.rollbackTransaction();

@@ -1,7 +1,7 @@
 import { Role } from '@main-module/roles/models/classes/role.entity';
 import { AuditEntity } from '@shared-module/models/classes/audit.entity';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, VirtualColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends AuditEntity {
@@ -26,6 +26,11 @@ export class User extends AuditEntity {
 
   @Column({ type: 'boolean', name: 'active', default: true })
   active: boolean;
+
+  @VirtualColumn({
+    query: (alias) => `CONCAT(${alias}.first_name, ' ', ${alias}.last_name)`,
+  })
+  fullName: string;
 
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({

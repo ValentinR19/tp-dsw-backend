@@ -1,6 +1,8 @@
 import { Budget } from '@budgets-module/models/classes/budget.entity';
 import { BudgetRepository } from '@budgets-module/repository/budget.repository';
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { NotFoundErrorException } from '@shared-module/exceptions/not-found.exception';
+import { NotSavedErrorException } from '@shared-module/exceptions/not-saved.exception';
 import { PaginatedQueryDTO } from '@shared-module/models/dtos/paginated-query.dto';
 import { IPaginated } from '@shared-module/models/interfaces/paginated.interface';
 import { DeepPartial, QueryRunner } from 'typeorm';
@@ -27,7 +29,7 @@ export class BudgetService {
       this.logger.log(`Se encontro el presupuesto con el id: ${id}`);
       return budget;
     } catch (error) {
-      throw new NotFoundException('Budget not found');
+      throw new NotFoundErrorException(Budget.name, error);
     }
   }
 
@@ -36,7 +38,7 @@ export class BudgetService {
       this.logger.log(`Se elimina el presupuesto con el id: ${id}`);
       await this.budgetRepository.softDelete(id);
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new NotSavedErrorException(Budget.name, error);
     }
   }
 
@@ -47,7 +49,7 @@ export class BudgetService {
       this.logger.log(`Se creo el presupuesto con el id: ${savedBudget.id}`);
       return savedBudget;
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new NotSavedErrorException(Budget.name, error);
     }
   }
 
@@ -58,7 +60,7 @@ export class BudgetService {
       this.logger.log(`Se actualizo el presupuesto con id: ${id}`);
       return updatedBudget;
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new NotSavedErrorException(Budget.name, error);
     }
   }
 }
