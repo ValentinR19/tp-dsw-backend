@@ -28,6 +28,7 @@ export class BudgetRepository {
     const [data, count] = await queryBuilder
       .skip((page - 1) * results)
       .take(results)
+      .orderBy('budget.updatedAt', 'DESC')
       .getManyAndCount();
 
     return { data, count };
