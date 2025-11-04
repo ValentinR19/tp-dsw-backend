@@ -16,10 +16,23 @@ export class UserRepository {
         global: `%${global}%`,
       });
     } else {
-      filters?.username && query.andWhere('user.username like :username', { username: `%${filters.username}%` });
-      filters?.email && query.andWhere('user.email like :email', { email: `%${filters.email}%` });
-      filters?.firstName && query.andWhere('user.firstName like :firstName', { firstName: `%${filters.firstName}%` });
-      filters?.lastName && query.andWhere('user.lastName like :lastName', { lastName: `%${filters.lastName}%` });
+      const username = filters?.username;
+      const email = filters?.email;
+      const firstName = filters?.firstName;
+      const lastName = filters?.lastName;
+
+      if (username) {
+        query.andWhere('user.username like :username', { username: `%${username}%` });
+      }
+      if (email) {
+        query.andWhere('user.email like :email', { email: `%${email}%` });
+      }
+      if (firstName) {
+        query.andWhere('user.firstName like :firstName', { firstName: `%${firstName}%` });
+      }
+      if (lastName) {
+        query.andWhere('user.lastName like :lastName', { lastName: `%${lastName}%` });
+      }
     }
     const [data, count] = await query
       .skip(resultSize * (page - 1))
