@@ -35,6 +35,9 @@ export class Customer extends AuditEntity {
   @Column({ type: 'varchar', name: 'internal_code' })
   internalCode: string;
 
+  @Column({ type: 'date', nullable: true })
+  birthdate?: Date;
+
   @Column({ default: true, type: 'boolean', name: 'active' })
   active: boolean;
 
