@@ -35,9 +35,9 @@ export class ProductService {
   }
 
   async findAll(): Promise<Product[]> {
-    this.logger.log(`Finding all products`);
+    //this.logger.log(`Finding all products`);
     const products = await this.productRepository.findAll();
-    this.logger.log(`Products found: ${JSON.stringify(products)}`);
+    //this.logger.log(`Products found: ${JSON.stringify(products)}`);
     return products;
   }
 
@@ -54,7 +54,7 @@ export class ProductService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      this.logger.log(`Creating product: ${JSON.stringify(dto)}`);
+      //this.logger.log(`Creating product: ${JSON.stringify(dto)}`);
       const product: Partial<Product> = { name: dto.name, description: dto.description, productCategoryId: dto.productCategoryId };
       const savedProduct = await this.save(product, queryRunner.manager);
 
@@ -72,7 +72,7 @@ export class ProductService {
       return savedProduct;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      this.logger.error(`Error creating product: ${error}`);
+      //this.logger.error(`Error creating product: ${error}`);
 
       throw error;
     } finally {
@@ -113,7 +113,7 @@ export class ProductService {
       return savedProduct;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      this.logger.error(`Error updating product ${id}: ${error}`);
+      //this.logger.error(`Error updating product ${id}: ${error}`);
       throw error;
     } finally {
       await queryRunner.release();
@@ -122,9 +122,9 @@ export class ProductService {
 
   private async save(product: Partial<Product>, manager?: EntityManager): Promise<Product> {
     try {
-      this.logger.log(`Saving product: ${JSON.stringify(product)}`);
+      //this.logger.log(`Saving product: ${JSON.stringify(product)}`);
       const savedProduct = await this.productRepository.save(product, manager);
-      this.logger.log(`Product saved: ${JSON.stringify(savedProduct)}`);
+      //this.logger.log(`Product saved: ${JSON.stringify(savedProduct)}`);
       return savedProduct;
     } catch (error) {
       throw new NotSavedErrorException(Product.name, error);

@@ -30,7 +30,7 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
     await queryRunner.startTransaction();
 
     try {
-      this.logger.log(`Creating budget: ${JSON.stringify(dto)}`);
+      //this.logger.log(`Creating budget: ${JSON.stringify(dto)}`);
 
       const budgetPayload: Partial<Budget> = {
         customerId: dto.customerId,
@@ -65,7 +65,7 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
       return budget;
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      this.logger.error(`Error creating budget: ${error}`);
+      //this.logger.error(`Error creating budget: ${error}`);
       throw error;
     } finally {
       await queryRunner.release();

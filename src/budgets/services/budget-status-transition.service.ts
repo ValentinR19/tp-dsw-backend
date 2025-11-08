@@ -17,9 +17,9 @@ export class BudgetStatusTransitionService {
 
   async findOneByOptions(options: FindOptions<BudgetStatusTransition>, queryRunner?: QueryRunner): Promise<BudgetStatusTransition> {
     try {
-      this.logger.log(`Finding budget status transition with options: ${JSON.stringify(options)}`);
+      //this.logger.log(`Finding budget status transition with options: ${JSON.stringify(options)}`);
       const budgetStatusTransition = await this.budgetStatusTransitionRepository.findOneByOptions(options, queryRunner);
-      this.logger.log(`Found budget status transition: ${JSON.stringify(budgetStatusTransition)}`);
+      //this.logger.log(`Found budget status transition: ${JSON.stringify(budgetStatusTransition)}`);
       return budgetStatusTransition;
     } catch (error) {
       throw new NotFoundErrorException(BudgetStatusTransition.name, error);
@@ -28,7 +28,7 @@ export class BudgetStatusTransitionService {
 
   async findTransitions(budgetId: number): Promise<BudgetStatusTransition[]> {
     const budget = await this.budgetService.findById(budgetId);
-    this.logger.log(`Finding transitions for budget: ${JSON.stringify(budget.code)}`);
+    //this.logger.log(`Finding transitions for budget: ${JSON.stringify(budget.code)}`);
     return await this.budgetStatusTransitionRepository.findAllByOptions({ fromStatusId: budget.statusId });
   }
 
@@ -37,7 +37,7 @@ export class BudgetStatusTransitionService {
   }
 
   async update(id: number, dto: Partial<BudgetStatusTransition>): Promise<BudgetStatusTransition> {
-    this.logger.log(`Updating budget status transition with id: ${id}`);
+    //this.logger.log(`Updating budget status transition with id: ${id}`);
     await this.findOneByOptions({ id });
     const updatedBudgetStatusTransition = await this.budgetStatusTransitionRepository.save({ id, ...dto });
     return updatedBudgetStatusTransition;

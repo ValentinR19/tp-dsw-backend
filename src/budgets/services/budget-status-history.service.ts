@@ -11,9 +11,9 @@ export class BudgetStatusHistoryService {
 
   async save(budgetStatusHistory: DeepPartial<BudgetStatusHistory>, queryRunner?: QueryRunner): Promise<BudgetStatusHistory> {
     try {
-      this.logger.log(`Saving BudgetStatusHistory: ${JSON.stringify(budgetStatusHistory)} `);
+      //this.logger.log(`Saving BudgetStatusHistory: ${JSON.stringify(budgetStatusHistory)} `);
       const savedBudgetStatusHistory = await this.budgetStatusHistoryRepository.save(budgetStatusHistory, queryRunner);
-      this.logger.log(`Saved BudgetStatusHistory: ${JSON.stringify(savedBudgetStatusHistory)} `);
+      //this.logger.log(`Saved BudgetStatusHistory: ${JSON.stringify(savedBudgetStatusHistory)} `);
       return savedBudgetStatusHistory;
     } catch (error) {
       throw new NotSavedErrorException(BudgetStatusHistory.name, error);

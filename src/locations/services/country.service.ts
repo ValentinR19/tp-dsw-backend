@@ -16,17 +16,17 @@ export class CountryService {
     if (typeof filters === 'string') {
       filters = JSON.parse(filters);
     }
-    this.logger.log(`Searching countries with filters: ${JSON.stringify(filters)}`);
+    //this.logger.log(`Searching countries with filters: ${JSON.stringify(filters)}`);
     const countries = await this.countryRepository.search(page, results, global, filters);
-    this.logger.log(`Country search finished successfully`);
+    //this.logger.log(`Country search finished successfully`);
     return countries;
   }
 
   async findById(id: number): Promise<Country> {
     try {
-      this.logger.log(`Searching country with id: ${id}`);
+      //this.logger.log(`Searching country with id: ${id}`);
       const country = await this.countryRepository.findById(id);
-      this.logger.log(`Country search finished successfully`);
+      //this.logger.log(`Country search finished successfully`);
       return country;
     } catch (error) {
       throw new NotFoundErrorException(Country.name, error);
@@ -34,9 +34,9 @@ export class CountryService {
   }
 
   async getAll(): Promise<Country[]> {
-    this.logger.log(`Getting all countries`);
+    //this.logger.log(`Getting all countries`);
     const countries = await this.countryRepository.getAll();
-    this.logger.log(`Countries retrieved successfully`);
+    //this.logger.log(`Countries retrieved successfully`);
     return countries;
   }
 }

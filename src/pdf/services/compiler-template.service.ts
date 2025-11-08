@@ -48,7 +48,7 @@ export class TemplateCompilerService {
 
   async compileTemplate(templatePath: string, data: any): Promise<string> {
     try {
-      this.logger.log(`Compiling template: ${templatePath}`);
+      //this.logger.log(`Compiling template: ${templatePath}`);
       const templateContent = await fs.readFile(templatePath, 'utf8');
       const template = handlebars.compile(templateContent);
       return template(data);

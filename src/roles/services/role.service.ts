@@ -18,7 +18,7 @@ export class RoleService {
 
   async search(page: number, dto: PaginatedQueryDTO<Role>): Promise<IPaginated<Role>> {
     const { results, global, filters } = dto;
-    this.logger.log(`Searching roles. Page: ${page} - Size: ${results} - GlobalFilters: ${global} -  Filters: ${JSON.stringify(filters)}`);
+    //this.logger.log(`Searching roles. Page: ${page} - Size: ${results} - GlobalFilters: ${global} -  Filters: ${JSON.stringify(filters)}`);
     return this.roleRepository.search(page, results, global, filters);
   }
 
@@ -46,9 +46,9 @@ export class RoleService {
 
   async save(role: Partial<Role>, queryRunner?: QueryRunner): Promise<Role> {
     try {
-      this.logger.log(`Saving role: ${JSON.stringify(role)}`);
+      //this.logger.log(`Saving role: ${JSON.stringify(role)}`);
       const savedRole = await this.roleRepository.save(role, queryRunner);
-      this.logger.log(`Role saved: ${JSON.stringify(savedRole)}`);
+      //this.logger.log(`Role saved: ${JSON.stringify(savedRole)}`);
       return savedRole;
     } catch (error) {
       throw new NotSavedErrorException(User.name, error);
@@ -56,27 +56,27 @@ export class RoleService {
   }
 
   async create(dto: CreateRoleDTO): Promise<Role> {
-    this.logger.log(`Creating role: ${JSON.stringify(dto)}`);
+    //this.logger.log(`Creating role: ${JSON.stringify(dto)}`);
     return this.save(dto);
   }
 
   async softDelete(id: number): Promise<void> {
     try {
-      this.logger.log(`Soft deleting role by id: ${id}`);
+      //this.logger.log(`Soft deleting role by id: ${id}`);
 
       await this.roleRepository.softDelete(id);
 
-      this.logger.log(`Role soft deleted: ${id}`);
+      //this.logger.log(`Role soft deleted: ${id}`);
     } catch (error) {
       throw new NotSavedErrorException(User.name, error);
     }
   }
 
   async update(id: number, dto: UpdateRoleDTO): Promise<Role> {
-    this.logger.log(`Updating role: ${JSON.stringify(dto)}`);
+    //this.logger.log(`Updating role: ${JSON.stringify(dto)}`);
     await this.findById(id);
     const updatedRole = await this.save({ id, ...dto });
-    this.logger.log(`Role updated: ${JSON.stringify(updatedRole)}`);
+    //this.logger.log(`Role updated: ${JSON.stringify(updatedRole)}`);
     return updatedRole;
   }
 }

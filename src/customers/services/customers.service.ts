@@ -21,9 +21,9 @@ export class CustomerService {
 
   async findById(id: number): Promise<Customer> {
     try {
-      this.logger.log(`Finding customer by id: ${id}`);
+      //this.logger.log(`Finding customer by id: ${id}`);
       const customer = await this.customerRepository.findById(id);
-      this.logger.log(`Customer found: ${JSON.stringify(customer)}`);
+      //this.logger.log(`Customer found: ${JSON.stringify(customer)}`);
       return customer;
     } catch (error) {
       throw new NotFoundErrorException(Customer.name, error);
@@ -31,14 +31,14 @@ export class CustomerService {
   }
 
   async findAll(): Promise<Customer[]> {
-    this.logger.log(`Finding all customers`);
+    //this.logger.log(`Finding all customers`);
     const customers = await this.customerRepository.findAll();
-    this.logger.log(`Customers found: ${JSON.stringify(customers)}`);
+    //this.logger.log(`Customers found: ${JSON.stringify(customers)}`);
     return customers;
   }
 
   async create(dto: CreateCustomerDto): Promise<Customer> {
-    this.logger.log(`Creating customer: ${JSON.stringify(dto)}`);
+    //this.logger.log(`Creating customer: ${JSON.stringify(dto)}`);
     if (!dto.statusId) {
       dto.statusId = 1;
     }
@@ -46,14 +46,14 @@ export class CustomerService {
   }
 
   async update(id: number, updateCustomerDto: DeepPartial<CreateCustomerDto>, queryRunner?: QueryRunner): Promise<Customer> {
-    this.logger.log(`Updating customer: ${JSON.stringify(updateCustomerDto)}`);
+    //this.logger.log(`Updating customer: ${JSON.stringify(updateCustomerDto)}`);
     await this.findById(id);
     return this.save({ ...updateCustomerDto, id }, queryRunner);
   }
 
   async softDelete(id: number): Promise<void> {
     try {
-      this.logger.log(`Removing customer: ${id}`);
+      //this.logger.log(`Removing customer: ${id}`);
       await this.customerRepository.softDelete(id);
     } catch (error) {
       throw new NotSavedErrorException(Customer.name, error);
@@ -62,9 +62,9 @@ export class CustomerService {
 
   private async save(customer: DeepPartial<Customer>, queryRunner?: QueryRunner): Promise<Customer> {
     try {
-      this.logger.log(`Saving customer: ${JSON.stringify(customer)}`);
+      //this.logger.log(`Saving customer: ${JSON.stringify(customer)}`);
       const savedCustomer = await this.customerRepository.save(customer, queryRunner);
-      this.logger.log(`Customer saved: ${JSON.stringify(savedCustomer)}`);
+      //this.logger.log(`Customer saved: ${JSON.stringify(savedCustomer)}`);
       return savedCustomer;
     } catch (error) {
       throw new NotSavedErrorException(Customer.name, error);

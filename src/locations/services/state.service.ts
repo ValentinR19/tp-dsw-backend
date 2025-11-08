@@ -15,7 +15,7 @@ export class StateService {
     if (typeof filters === 'string') {
       filters = JSON.parse(filters);
     }
-    this.logger.log(`Searching states with filters: ${JSON.stringify(filters)}`);
+    //this.logger.log(`Searching states with filters: ${JSON.stringify(filters)}`);
     return this.stateRepository.search(page, results, countryId, global, filters);
   }
 }

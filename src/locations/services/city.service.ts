@@ -15,7 +15,7 @@ export class CityService {
     if (typeof filters === 'string') {
       filters = JSON.parse(filters);
     }
-    this.logger.log(`Searching cities with filters: ${JSON.stringify(filters)}`);
+    //this.logger.log(`Searching cities with filters: ${JSON.stringify(filters)}`);
     return this.cityRepository.search(page, results, stateId, global, filters);
   }
 }

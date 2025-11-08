@@ -26,7 +26,7 @@ export class UpdateBudgetAction {
 
     try {
       const { items, budgetShipping, budgetBilling, ...budget } = dto;
-      this.logger.log(`Updating budget ID ${id} with data: ${JSON.stringify(dto)}`);
+      //this.logger.log(`Updating budget ID ${id} with data: ${JSON.stringify(dto)}`);
 
       await this.budgetService.findById(id, queryRunner);
 

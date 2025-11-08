@@ -24,9 +24,9 @@ export class BudgetService {
 
   async findById(id: number, queryRunner?: QueryRunner): Promise<Budget> {
     try {
-      this.logger.log(`Se busca el presupuesto con el id: ${id}`);
+      //this.logger.log(`Se busca el presupuesto con el id: ${id}`);
       const budget = await this.budgetRepository.findById(id, queryRunner);
-      this.logger.log(`Se encontro el presupuesto con el id: ${id}`);
+      //this.logger.log(`Se encontro el presupuesto con el id: ${id}`);
       return budget;
     } catch (error) {
       throw new NotFoundErrorException(Budget.name, error);
@@ -35,7 +35,7 @@ export class BudgetService {
 
   async softDelete(id: number): Promise<void> {
     try {
-      this.logger.log(`Se elimina el presupuesto con el id: ${id}`);
+      //this.logger.log(`Se elimina el presupuesto con el id: ${id}`);
       await this.budgetRepository.softDelete(id);
     } catch (error) {
       throw new NotSavedErrorException(Budget.name, error);
@@ -44,9 +44,9 @@ export class BudgetService {
 
   async save(budget: DeepPartial<Budget>, queryRunner?: QueryRunner): Promise<Budget> {
     try {
-      this.logger.log(`Comienza la creacion de un presupuesto con la siguiente informacion: ${JSON.stringify(budget)}`);
+      //this.logger.log(`Comienza la creacion de un presupuesto con la siguiente informacion: ${JSON.stringify(budget)}`);
       const savedBudget = await this.budgetRepository.save(budget, queryRunner);
-      this.logger.log(`Se creo el presupuesto con el id: ${savedBudget.id}`);
+      //this.logger.log(`Se creo el presupuesto con el id: ${savedBudget.id}`);
       return savedBudget;
     } catch (error) {
       throw new NotSavedErrorException(Budget.name, error);
@@ -55,9 +55,9 @@ export class BudgetService {
 
   async update(id: number, dto: Partial<Budget>, queryRunner?: QueryRunner): Promise<Budget> {
     try {
-      this.logger.log(`Comienza la actualizacion del presupuesto con id: ${id}`);
+      //this.logger.log(`Comienza la actualizacion del presupuesto con id: ${id}`);
       const updatedBudget = await this.budgetRepository.save({ id, ...dto }, queryRunner);
-      this.logger.log(`Se actualizo el presupuesto con id: ${id}`);
+      //this.logger.log(`Se actualizo el presupuesto con id: ${id}`);
       return updatedBudget;
     } catch (error) {
       throw new NotSavedErrorException(Budget.name, error);
