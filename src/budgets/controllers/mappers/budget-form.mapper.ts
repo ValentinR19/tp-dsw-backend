@@ -52,7 +52,7 @@ export class BudgetFormMapper {
             buyerAddress: budget.budgetBilling.buyerAddress,
             buyerTaxId: budget.budgetBilling.buyerTaxId,
             shippingCountry: budget.budgetBilling.shippingCountry,
-            consigneeAdress: budget.budgetBilling.consigneeAddress,
+            //consigneeAdress: budget.budgetBilling.consigneeAddress,
             portDestination: budget.budgetBilling.portDestination,
             paymentDescription: budget.budgetBilling.paymentDescription,
           }
