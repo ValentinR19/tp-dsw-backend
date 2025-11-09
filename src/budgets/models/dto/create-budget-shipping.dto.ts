@@ -1,20 +1,23 @@
-import { BudgetShipping } from '@budgets-module/models/classes/budget-shipping.entity';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class CreateBudgetShippingDto extends BudgetShipping {
+export class CreateBudgetShippingDto {
   @IsOptional()
   @IsNumber({}, { message: 'El ID de la ciudad debe ser un número.' })
-  cityId: number;
+  cityId?: number;
 
   @IsOptional()
   @IsNumber({}, { message: 'El ID del estado debe ser un número.' })
-  stateId: number;
+  stateId?: number;
 
   @IsOptional()
   @IsNumber({}, { message: 'El ID del país debe ser un número.' })
-  countryId: number;
+  countryId?: number;
 
   @IsString({ message: 'La dirección debe ser un texto.' })
   @IsOptional()
-  address: string;
+  address?: string;
+
+  @IsString({ message: 'El email debe ser un texto.' })
+  @IsOptional()
+  email?: string;
 }

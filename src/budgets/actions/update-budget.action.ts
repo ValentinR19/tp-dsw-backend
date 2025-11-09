@@ -1,4 +1,5 @@
 import { Budget } from '@budgets-module/models/classes/budget.entity';
+import { BudgetShipping } from '@budgets-module/models/classes/budget-shipping.entity';
 import { UpdateBudgetDto } from '@budgets-module/models/dto/update-budget.dto';
 import { BudgetBillingService } from '@budgets-module/services/budget-billing.service';
 import { BudgetItemService } from '@budgets-module/services/budget-item.service';
@@ -26,17 +27,9 @@ export class UpdateBudgetAction {
 
     try {
       const { items, budgetShipping, budgetBilling, ...budget } = dto;
-      //this.logger.log(`Updating budget ID ${id} with data: ${JSON.stringify(dto)}`);
 
       await this.budgetService.findById(id, queryRunner);
-
-      await this.budgetService.save(
-        {
-          id,
-          ...budget,
-        },
-        queryRunner,
-      );
+      await this.budgetService.save({ id, ...budget }, queryRunner);
 
       if (items) {
         await this.budgetItemService.deleteByBudgetId(id, queryRunner);
@@ -49,10 +42,29 @@ export class UpdateBudgetAction {
 
       if (budgetShipping) {
         const existingShipping = await this.budgetShippingService.findByBudgetId(id, queryRunner);
+        // Preparar datos eliminando propiedades undefined
+        const shippingData: Partial<BudgetShipping> = {
+          address: budgetShipping.address,
+          email: budgetShipping.email,
+          countryId: budgetShipping.countryId || undefined,
+          stateId: budgetShipping.stateId || undefined,
+          cityId: budgetShipping.cityId || undefined,
+        };
+
+        // Remover campos undefined
+        Object.keys(shippingData).forEach((key) => {
+          if (shippingData[key] === undefined) {
+            delete shippingData[key];
+          }
+        });
+
         if (existingShipping) {
-          await this.budgetShippingService.save({ id: existingShipping.id, ...budgetShipping }, queryRunner);
+          await this.budgetShippingService.save({ id: existingShipping.id, ...shippingData }, queryRunner);
         } else {
-          await this.budgetShippingService.create({ ...budgetShipping, budgetId: id }, queryRunner);
+          await this.budgetShippingService.create(
+            { ...shippingData, budgetId: id } as any, // Usar 'as any' temporalmente
+            queryRunner,
+          );
         }
       }
 
@@ -61,12 +73,11 @@ export class UpdateBudgetAction {
         if (existingBilling) {
           await this.budgetBillingService.save({ id: existingBilling.id, ...budgetBilling }, queryRunner);
         } else {
-          await this.budgetBillingService.create({ ...budgetBilling, budgetId: id }, queryRunner);
+          await this.budgetBillingService.create({ ...budgetBilling, budgetId: id } as any, queryRunner);
         }
       }
 
       await queryRunner.commitTransaction();
-
       return this.budgetService.findById(id);
     } catch (error) {
       await queryRunner.rollbackTransaction();

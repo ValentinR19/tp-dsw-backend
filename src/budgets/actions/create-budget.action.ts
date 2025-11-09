@@ -57,8 +57,13 @@ export class CreateBudgetAction implements IUseCase<{ dto: CreateBudgetDto; user
 
       await this.customerService.update(dto.customerId, { statusId: 2 }, queryRunner);
 
-      dto.budgetShipping && (await this.budgetShippingService.create({ ...dto.budgetShipping, budgetId: budget.id }, queryRunner));
-
+      if (dto.budgetShipping) {
+        const shippingData = {
+          ...dto.budgetShipping,
+          budgetId: budget.id,
+        };
+        await this.budgetShippingService.create(shippingData, queryRunner);
+      }
       dto.budgetBilling && (await this.budgetBillingService.create({ ...dto.budgetBilling, budgetId: budget.id }, queryRunner));
 
       await queryRunner.commitTransaction();
